@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ツルとカメ合わせて10匹、足は全部で32本。面積図の読み方から学ぶ18ステップ。">
+<meta name="course-order" content="3">
+<title>つるかめ算マスター — 表と面積図を18ステップで</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFBF7; --grid:#E7ECE4; --ink:#243247; --ink-soft:#5C6B82;
+  --kid:#1D9E75; --kid-bg:#DFF4EB; --kid-dark:#0A5540;
+  --mom:#D85A30; --mom-bg:#FBE8DF; --mom-dark:#8A3315;
+  --marker:#FFE9A8; --ok:#1D7A46; --ok-bg:#E4F4E9; --ng:#C0442B; --ng-bg:#FBEAE5;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Zen Maru Gothic",system-ui,sans-serif;
+  color:var(--ink); background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  min-height:100vh; line-height:1.8;
+}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 80px}
+header h1{font-size:26px;font-weight:700;margin:0 0 4px;letter-spacing:.02em}
+header p{margin:0 0 24px;color:var(--ink-soft);font-size:14px}
+.card{
+  background:#fff;border:2px solid var(--ink);border-radius:var(--radius);
+  padding:28px 28px 24px; box-shadow:6px 6px 0 rgba(36,50,71,.12);
+}
+.progressbar{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.prog-label{font-size:13px;font-weight:700;min-width:64px;color:var(--ink-soft)}
+.track{flex:1;height:10px;background:var(--grid);border-radius:5px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--kid);border-radius:5px;transition:width .35s ease}
+.backbtn{font-family:inherit;font-size:13px;padding:6px 14px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;cursor:pointer}
+.backbtn:hover{background:var(--grid)}
+.jumpnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px}
+.jump{font-family:inherit;font-size:13px;font-weight:700;min-width:34px;height:34px;padding:0 8px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer}
+.jump:hover{background:var(--grid)}
+.jump.here{background:var(--kid);border-color:var(--kid-dark);color:#fff}
+.step-tag{display:inline-block;background:var(--ink);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 0 12px;letter-spacing:.05em}
+.q{font-size:17px;font-weight:500;margin:0 0 18px}
+.problem{background:var(--marker);border-radius:8px;padding:14px 18px;font-size:16px;font-weight:500;margin:0 0 18px}
+.note{font-size:13.5px;color:var(--ink-soft);margin:12px 0 0}
+button.choice, button.action, button.next{
+  font-family:inherit;font-size:15.5px;font-weight:500;color:var(--ink);
+  background:#fff;border:2px solid var(--ink);border-radius:10px;
+  padding:10px 18px;margin:4px 8px 4px 0;cursor:pointer;
+  transition:transform .08s ease, background .15s ease;
+}
+button.choice:hover,button.action:hover,button.next:hover{background:var(--grid)}
+button.choice:active,button.action:active{transform:scale(.97)}
+button:focus-visible{outline:3px solid var(--kid);outline-offset:2px}
+button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+button.next{background:var(--kid);border-color:var(--kid-dark);color:#fff;display:block;margin-top:14px}
+button.next:hover{background:var(--kid-dark)}
+.fb{min-height:26px;margin-top:14px;font-size:14.5px;font-weight:500}
+.fb .ok{color:var(--ok);background:var(--ok-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+.fb .ng{color:var(--ng);background:var(--ng-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+table.age{border-collapse:collapse;margin:0 0 14px;font-size:14.5px}
+table.age th,table.age td{border:1.5px solid var(--ink);padding:7px 12px;text-align:center;background:#fff}
+table.age th{background:var(--grid);font-weight:700}
+table.age tr.pick{cursor:pointer}
+table.age tr.pick:hover td{background:var(--marker)}
+table.age tr.won td{background:var(--ok-bg)}
+/* ---- 面積図 ---- */
+.fig{display:flex;align-items:flex-end;margin:14px 0 4px}
+.rect{display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:12.5px;line-height:1.4;border:2px solid;flex:none}
+.r-tsuru{background:var(--kid-bg);border-color:var(--kid);color:var(--kid-dark)}
+.r-kame{background:var(--mom-bg);border-color:var(--mom);color:var(--mom-dark)}
+.r-over{background:var(--mom);border-color:var(--mom-dark);color:#fff}
+.r-dash{border-style:dashed;background:transparent;color:var(--ink-soft)}
+.vlabel{width:52px;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:right;padding-right:8px;flex:none;align-self:center}
+.hlabel{font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:center;margin:4px 0 14px}
+.stack{position:relative;flex:none}
+input[type=number]{
+  font-family:inherit;font-size:16px;width:90px;text-align:center;
+  border:2px solid var(--ink);border-radius:8px;padding:8px 6px;background:#fff;
+}
+input[type=number]:focus-visible{outline:3px solid var(--kid);outline-offset:1px}
+input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
+.total-box{display:inline-block;background:var(--grid);border-radius:8px;padding:6px 16px;font-size:16px;font-weight:700;margin:6px 0 0}
+.fillrow{font-size:15.5px;margin:0 0 12px}
+.hidden{display:none}
+@media (prefers-reduced-motion: reduce){ .fill{transition:none} button{transition:none} }
+@media (max-width:560px){
+  .card{padding:20px 14px}
+  .vlabel{width:40px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>つるかめ算マスター</h1>
+  <p>「もし全部ツルなら?」からはじめて、表 → 面積図の18ステップで</p>
+</header>
+
+<div class="progressbar">
+  <span class="prog-label" id="prog">1 / 20</span>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <button class="backbtn" id="prevb" onclick="go(cur-1)">← 戻る</button>
+</div>
+
+<nav class="jumpnav" id="jumpnav" aria-label="ステップへジャンプ"></nav>
+
+<div class="card">
+
+<section class="panel" id="p0">
+  <span class="step-tag">はじめに</span>
+  <p class="problem">【問題】ツルとカメが合わせて 10匹 います。足の数は全部で 32本 です。ツルとカメはそれぞれ何匹いるでしょう?</p>
+  <p class="q">2種類の生き物が混ざった、つるかめ算の代表的な問題。18個の小さなステップでゆっくり進みます。</p>
+  <button class="next" onclick="go(1)">はじめる →</button>
+</section>
+
+<section class="panel hidden" id="p1">
+  <span class="step-tag">ステップ 1</span>
+  <p class="q">まず確認。ツルとカメの足の数は?</p>
+  <button class="choice" onclick="mc(this,true,1,'ツルは鳥だから2本、カメは4本。この「1匹あたりのちがい」があとで大活躍する。')">ツル2本・カメ4本</button>
+  <button class="choice" onclick="mc(this,false,1,'ツルは鳥。鳥の足は2本だね。')">ツル4本・カメ2本</button>
+  <div class="fb" id="f1"></div>
+</section>
+
+<section class="panel hidden" id="p2">
+  <span class="step-tag">ステップ 2</span>
+  <p class="q">何匹ずついるかわからないなら、仮に決めてみよう。もし 10匹全部ツル だったら、足は全部で何本?</p>
+  <p class="fillrow">2 × 10 = <input type="number" id="i2" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(2,20,'全部ツルなら 20本。')">答え合わせ</button>
+  <div class="fb" id="f2"></div>
+</section>
+
+<section class="panel hidden" id="p3">
+  <span class="step-tag">ステップ 3</span>
+  <p class="q">おかしい! 実際の足は 32本 のはず。くいちがいは何本?</p>
+  <p class="fillrow">32 − 20 = <input type="number" id="i3" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(3,12,'12本足りない。つまり「全部ツル」はまちがい。カメを混ぜて調べてみよう。')">答え合わせ</button>
+  <div class="fb" id="f3"></div>
+</section>
+
+<section class="panel hidden" id="p4">
+  <span class="step-tag">ステップ 4</span>
+  <p class="q">「ツル1羽をカメ1匹に置きかえる」ボタンで表を育てよう。足の合計が 32本 になったらストップ!</p>
+  <table class="age" id="t1">
+    <tr><th>カメ</th><th>ツル</th><th>足の合計</th><th>32本まで</th></tr>
+    <tr><td>0匹</td><td>10羽</td><td>20</td><td>あと12</td></tr>
+  </table>
+  <button class="action" onclick="addRow()">ツル1羽 → カメ1匹 に置きかえ</button>
+  <div class="fb" id="f4"></div>
+</section>
+
+<section class="panel hidden" id="p5">
+  <span class="step-tag">ステップ 5</span>
+  <p class="q">いま育てた表がこれ。足の合計は、1匹置きかえるごとにいくつずつ増えた?</p>
+  <table class="age">
+    <tr><th>カメ</th><th>ツル</th><th>足の合計</th></tr>
+    <tr><td>0匹</td><td>10羽</td><td>20</td></tr>
+    <tr><td>1匹</td><td>9羽</td><td>22</td></tr>
+    <tr><td>2匹</td><td>8羽</td><td>24</td></tr>
+    <tr><td>3匹</td><td>7羽</td><td>26</td></tr>
+  </table>
+  <button class="choice" onclick="mc(this,false,5,'合計の列を上から見てみよう。20 → 22 → 24 → 26。')">1ずつ</button>
+  <button class="choice" onclick="mc(this,true,5,'20 → 22 → 24 → 26。きれいに2ずつ増えている。')">2ずつ</button>
+  <button class="choice" onclick="mc(this,false,5,'合計の列を上から見てみよう。20 → 22 → 24 → 26。')">4ずつ</button>
+  <div class="fb" id="f5"></div>
+</section>
+
+<section class="panel hidden" id="p6">
+  <span class="step-tag">ステップ 6</span>
+  <p class="q">なぜ1匹置きかえると「2本」増えるんだろう?</p>
+  <button class="choice" onclick="mc(this,true,6,'足2本のツルが足4本のカメに変わるから、4 − 2 = 2本 増える。これがこの問題の心臓部!')">ツル(2本)がカメ(4本)に変わると 4−2 = 2本 増えるから</button>
+  <button class="choice" onclick="mc(this,false,6,'匹数の合計は10匹のまま変わらない。増えているのは足の数。1匹分の足のちがいに注目。')">生き物が1匹増えるから</button>
+  <div class="fb" id="f6"></div>
+</section>
+
+<section class="panel hidden" id="p7">
+  <span class="step-tag">ステップ 7</span>
+  <p class="q">表の答えを読み取ろう。足の合計が 32本 の行をタップ!</p>
+  <table class="age" id="t3"><tr><th>カメ</th><th>ツル</th><th>足の合計</th></tr></table>
+  <div class="fb" id="f7"></div>
+</section>
+
+<section class="panel hidden" id="p8">
+  <span class="step-tag">ステップ 8</span>
+  <p class="q">ここから面積図。まず図の読み方だけ練習しよう。「全部ツルなら 2 × 10 = 20本」を長方形で表しました。この長方形の「たて」は何を表している?</p>
+  <div class="fig">
+    <span class="vlabel">2本</span>
+    <div class="rect r-tsuru" style="width:280px;height:52px">2本 × 10羽 = 20本</div>
+  </div>
+  <div class="hlabel" style="margin-left:52px;width:280px">10羽</div>
+  <button class="choice" onclick="mc(this,false,8,'よこの長さが10羽=匹数。たては左に書いてある「2本」。')">生き物の数</button>
+  <button class="choice" onclick="mc(this,true,8,'たて = 1匹あたりの足の数。よこ = 匹数。')">1匹あたりの足の数</button>
+  <div class="fb" id="f8"></div>
+</section>
+
+<section class="panel hidden" id="p9">
+  <span class="step-tag">ステップ 9</span>
+  <p class="q">では、この長方形の「面積」(たて × よこ = 2 × 10)は何を表している?</p>
+  <div class="fig">
+    <span class="vlabel">2本</span>
+    <div class="rect r-tsuru" style="width:280px;height:52px">面積 = ?</div>
+  </div>
+  <div class="hlabel" style="margin-left:52px;width:280px">10羽</div>
+  <button class="choice" onclick="mc(this,true,9,'1匹の足の数 × 匹数 = 足の合計。面積図では「面積 = 合計」。ここさえわかれば、あとは図形の問題!')">足の合計(20本)</button>
+  <button class="choice" onclick="mc(this,false,9,'たて × よこ を計算すると 2 × 10 = 20。この20の単位は「本」。つまり…?')">生き物の合計(10匹)</button>
+  <div class="fb" id="f9"></div>
+</section>
+
+<section class="panel hidden" id="p10">
+  <span class="step-tag">ステップ 10</span>
+  <p class="q">今度はカメの長方形。カメのたては何本?</p>
+  <div class="fig">
+    <span class="vlabel">?本</span>
+    <div class="rect r-kame" style="width:160px;height:104px">カメ</div>
+  </div>
+  <div class="hlabel" style="margin-left:52px;width:160px">カメの数(?匹)</div>
+  <button class="choice" onclick="mc(this,false,10,'2本はツルのたて。カメの足は…?')">2本</button>
+  <button class="choice" onclick="mc(this,true,10,'カメのたては4本。ツル(2本)より背の高い長方形になる。')">4本</button>
+  <div class="fb" id="f10"></div>
+</section>
+
+<section class="panel hidden" id="p11">
+  <span class="step-tag">ステップ 11</span>
+  <p class="q">ツルとカメの長方形を横にならべました。何匹ずつかはまだわからないけど、「よこの長さの合計」だけはわかる。何匹?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="rect r-tsuru" style="width:130px;height:52px">ツル<br>(?羽)</div>
+    <div class="rect r-kame" style="width:150px;height:104px">カメ<br>(?匹)</div>
+  </div>
+  <div class="hlabel" style="margin-left:52px;width:280px">←—— 合わせて ?匹 ——→</div>
+  <button class="choice" onclick="mc(this,true,11,'合わせて10匹だから、よこ全体は10。境目の位置だけがナゾ。')">10匹</button>
+  <button class="choice" onclick="mc(this,false,11,'32は足の本数。よこは「匹数」だったね。')">32匹</button>
+  <div class="fb" id="f11"></div>
+</section>
+
+<section class="panel hidden" id="p12">
+  <span class="step-tag">ステップ 12</span>
+  <p class="q">では、この2つの長方形の「面積の合計」は何を表している?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="rect r-tsuru" style="width:130px;height:52px">ツルの面積</div>
+    <div class="rect r-kame" style="width:150px;height:104px">カメの面積</div>
+  </div>
+  <div class="hlabel" style="margin-left:52px;width:280px">10匹</div>
+  <button class="choice" onclick="mc(this,true,12,'ツルの足 + カメの足 = 足の合計32本。「面積の合計 = 32」と「よこの合計 = 10」が図の手がかり。')">足の合計 = 32本</button>
+  <button class="choice" onclick="mc(this,false,12,'20本は「全部ツルだったら」の面積。実際の合計は問題文にある数。')">20本</button>
+  <div class="fb" id="f12"></div>
+</section>
+
+<section class="panel hidden" id="p13">
+  <span class="step-tag">ステップ 13</span>
+  <p class="q">スライダーでカメの数を動かして、面積の合計(足の合計)が 32本 になる場所を探そう!</p>
+  <div class="fig" aria-hidden="true">
+    <span class="vlabel"></span>
+    <div class="rect r-tsuru" id="ftsuru" style="width:280px;height:52px">ツル</div>
+    <div class="rect r-kame" id="fkame" style="width:0;height:104px;border-width:0">カメ</div>
+  </div>
+  <div style="margin-left:52px">
+    <label for="slider" style="font-size:14px;font-weight:700">カメの数: <span id="sv">0</span>匹</label><br>
+    <input type="range" id="slider" min="0" max="10" value="0" step="1" oninput="slide(this.value)">
+    <div class="total-box">足の合計 = <span id="stotal">20</span> 本</div>
+  </div>
+  <div class="fb" id="f13"></div>
+</section>
+
+<section class="panel hidden" id="p14">
+  <span class="step-tag">ステップ 14</span>
+  <p class="q">今度は計算で境目を見つけよう。「全部ツル(2本×10匹=20本)」の帯に、カメの分だけ上に「はみ出し」が乗っている。はみ出し部分の面積は何本?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="stack" style="width:280px;height:118px">
+      <div class="rect r-dash" style="position:absolute;right:0;bottom:56px;width:168px;height:52px">はみ出し<br>面積 = ?本</div>
+      <div class="rect r-tsuru" style="position:absolute;left:0;bottom:0;width:280px;height:52px">全部ツルなら 2 × 10 = 20本</div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:2px">全体の面積(足の合計)= 32本 だったことを思い出そう。</p>
+  <p class="fillrow">はみ出し = 32 − 20 = <input type="number" id="i14" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(14,12,'はみ出しは 12本。ステップ3の「くいちがい12本」と同じ数が図に現れた!')">答え合わせ</button>
+  <div class="fb" id="f14"></div>
+</section>
+
+<section class="panel hidden" id="p15">
+  <span class="step-tag">ステップ 15</span>
+  <p class="q">はみ出し部分の「たて」は何本? (表パートの発見を思い出して!)</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="stack" style="width:280px;height:118px">
+      <div class="rect r-over" style="position:absolute;right:0;bottom:56px;width:168px;height:52px">12本<br>たて = ?本</div>
+      <div class="rect r-tsuru" style="position:absolute;left:0;bottom:0;width:280px;height:52px">2 × 10 = 20本</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,false,15,'4本はカメのたて全部。はみ出しは、カメのたてのうちツルの帯(2本)から上の部分だけ。')">4本</button>
+  <button class="choice" onclick="mc(this,true,15,'たては 4 − 2 = 2本。表で発見した「1匹置きかえると2本増える」の正体はこれ!')">2本</button>
+  <div class="fb" id="f15"></div>
+</section>
+
+<section class="panel hidden" id="p16">
+  <span class="step-tag">ステップ 16</span>
+  <p class="q">はみ出しは「面積12本・たて2本」の長方形。よこの長さ = カメの数は何匹?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="stack" style="width:280px;height:118px">
+      <div class="rect r-over" style="position:absolute;right:0;bottom:56px;width:168px;height:52px">面積12本 ÷ たて2本</div>
+      <div class="rect r-tsuru" style="position:absolute;left:0;bottom:0;width:280px;height:52px">2 × 10 = 20本</div>
+    </div>
+  </div>
+  <div class="hlabel" style="margin-left:164px;width:168px">よこ = カメ ?匹</div>
+  <p class="fillrow">カメ = 12 ÷ 2 = <input type="number" id="i16" placeholder="?"> 匹</p>
+  <button class="action" onclick="ck(16,6,'カメは6匹。ステップ7で表から見つけた答えと同じ!')">答え合わせ</button>
+  <div class="fb" id="f16"></div>
+</section>
+
+<section class="panel hidden" id="p17">
+  <span class="step-tag">ステップ 17</span>
+  <p class="q">最後にツルの数。合わせて10匹だから…</p>
+  <p class="fillrow">ツル = 10 − 6 = <input type="number" id="i17" placeholder="?"> 羽</p>
+  <button class="action" onclick="ck(17,4,'ツル4羽・カメ6匹。検算:2 × 4 + 4 × 6 = 8 + 24 = 32本。ぴったり!')">答え合わせ</button>
+  <div class="fb" id="f17"></div>
+</section>
+
+<section class="panel hidden" id="p18">
+  <span class="step-tag">ステップ 18</span>
+  <p class="q">練習問題:「50円切手と80円切手を合わせて10枚買ったら、代金は620円でした」。全部50円切手と仮定して、4つの空らんをうめよう。</p>
+  <p class="fillrow">はみ出し = 620 − 50 × 10 = <input type="number" id="j1" placeholder="?"> 円</p>
+  <p class="fillrow">はみ出しのたて = 80 − 50 = <input type="number" id="j2" placeholder="?"> 円</p>
+  <p class="fillrow">80円切手 = <input type="number" id="j3" placeholder="?"> 枚</p>
+  <p class="fillrow">50円切手 = <input type="number" id="j4" placeholder="?"> 枚</p>
+  <button class="action" onclick="ckAll()">答え合わせ</button>
+  <div class="fb" id="f18"></div>
+</section>
+
+<section class="panel hidden" id="p19">
+  <span class="step-tag">ゴール!</span>
+  <p class="q">全ステップ完了! つるかめ算の型は「全部○○と仮定 → 合計とのくいちがい ÷ 1匹あたりの差」。面積図では、くいちがいが「はみ出しの面積」、1匹あたりの差が「はみ出しのたて」として見えるのでした。</p>
+  <p class="note">切手の問題でわかったように、生き物でなくても「2種類 × 個数 × 合計」ならぜんぶつるかめ算。3種類が混ざる「いもづる算」に進むと、この型がさらに強力になります。</p>
+  <button class="next" onclick="go(0)">最初からやり直す</button>
+</section>
+
+</div>
+</div>
+
+<script>
+var P = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+var cur = 0;
+(function(){
+  var nav=document.getElementById('jumpnav');
+  var labels=['始','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','終'];
+  labels.forEach(function(lb,i){
+    var b=document.createElement('button');
+    b.className='jump'; b.textContent=lb; b.id='jb'+i;
+    b.setAttribute('aria-label', i===0?'はじめに':(i===labels.length-1?'ゴール':'ステップ'+lb));
+    b.onclick=function(){ go(i); };
+    nav.appendChild(b);
+  });
+})();
+function go(i){
+  if(i<0||i>=P.length) return;
+  cur=i;
+  P.forEach(function(p,j){ p.classList.toggle('hidden', j!==i); });
+  document.getElementById('prog').textContent = (i+1)+' / '+P.length;
+  document.getElementById('fill').style.width = Math.round((i+1)/P.length*100)+'%';
+  document.getElementById('prevb').style.visibility = (i===0)?'hidden':'visible';
+  P.forEach(function(_,j){
+    var b=document.getElementById('jb'+j);
+    if(b) b.classList.toggle('here', j===i);
+  });
+}
+function nextBtn(fb,i){
+  if(fb.querySelector('button.next')) return;
+  var b=document.createElement('button');
+  b.textContent='次へ →'; b.className='next';
+  b.onclick=function(){ go(i+1); };
+  fb.appendChild(b);
+}
+function mc(btn,ok,step,msg){
+  var fb=document.getElementById('f'+step);
+  if(ok){
+    fb.innerHTML='<span class="ok">正解! '+(msg||'')+'</span>';
+    btn.classList.add('correct');
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">おしい! '+(msg||'もう一度考えてみよう。')+'</span>';
+  }
+}
+var hints={
+  2:'1羽あたり2本 × 10羽 を計算しよう。',
+  3:'32 − 20 を計算しよう。',
+  14:'全体の面積32本から、下の帯20本をひこう。',
+  16:'長方形のよこ = 面積 ÷ たて。12 ÷ 2 だよ。',
+  17:'合わせて10匹。10からカメの6匹をひこう。'
+};
+function ck(step,ans,msg){
+  var v=Number(document.getElementById('i'+step).value);
+  var fb=document.getElementById('f'+step);
+  if(v===ans){
+    fb.innerHTML='<span class="ok">正解! '+msg+'</span>';
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">'+(hints[step]||'もう一度!')+'</span>';
+  }
+}
+var kame=0;
+function addRow(){
+  if(kame>=6) return;
+  kame++;
+  var t=document.getElementById('t1');
+  var r=t.insertRow(-1);
+  var total=20+2*kame;
+  r.innerHTML='<td>'+kame+'匹</td><td>'+(10-kame)+'羽</td><td>'+total+'</td><td>'+(total===32?'ぴったり!':'あと'+(32-total))+'</td>';
+  if(kame===6){
+    var fb=document.getElementById('f4');
+    fb.innerHTML='<span class="ok">32本になった! カメ6匹・ツル4羽のとき、足はぴったり32本。</span>';
+    nextBtn(fb,4);
+  }
+}
+(function(){
+  var t3=document.getElementById('t3');
+  for(var n=0;n<=6;n++){
+    (function(n){
+      var r=t3.insertRow(-1);
+      r.className='pick';
+      r.innerHTML='<td>'+n+'匹</td><td>'+(10-n)+'羽</td><td>'+(20+2*n)+'</td>';
+      r.onclick=function(){
+        var fb=document.getElementById('f7');
+        if(n===6){
+          r.classList.add('won');
+          fb.innerHTML='<span class="ok">正解! カメ6匹・ツル4羽。表だけでも解けた!</span>';
+          nextBtn(fb,7);
+        }else{
+          fb.innerHTML='<span class="ng">その行の足の合計は32本じゃないよ。合計の列が32の行をさがそう。</span>';
+        }
+      };
+    })(n);
+  }
+})();
+function slide(v){
+  v=Number(v);
+  document.getElementById('sv').textContent=v;
+  var ft=document.getElementById('ftsuru');
+  var fk=document.getElementById('fkame');
+  ft.style.width=((10-v)*28)+'px';
+  fk.style.width=(v*28)+'px';
+  ft.style.borderWidth=(v===10)?'0':'2px';
+  fk.style.borderWidth=(v===0)?'0':'2px';
+  ft.textContent=(v===10)?'':'ツル';
+  fk.textContent=(v===0)?'':'カメ';
+  var total=2*(10-v)+4*v;
+  document.getElementById('stotal').textContent=total;
+  var fb=document.getElementById('f13');
+  if(total===32){
+    fb.innerHTML='<span class="ok">32本になった! カメ6匹のとき、図の面積の合計がちょうど32本。</span>';
+    nextBtn(fb,13);
+  }else if(!fb.querySelector('button.next')){
+    fb.innerHTML='<span class="ng">'+(total<32?'まだ足りない。カメを増やしてみよう。':'増やしすぎ! カメを減らしてみよう。')+'</span>';
+  }
+}
+function ckAll(){
+  var a=Number(document.getElementById('j1').value);
+  var b=Number(document.getElementById('j2').value);
+  var c=Number(document.getElementById('j3').value);
+  var d=Number(document.getElementById('j4').value);
+  var fb=document.getElementById('f18');
+  if(a===120&&b===30&&c===4&&d===6){
+    fb.innerHTML='<span class="ok">全問正解! はみ出し120円 ÷ 30円 = 80円切手4枚、50円切手6枚。検算:50×6 + 80×4 = 620円。</span>';
+    nextBtn(fb,18);
+  }else{
+    var h=[];
+    if(a!==120) h.push('はみ出しは 620 − 500');
+    if(b!==30) h.push('たては 80 − 50');
+    if(c!==4) h.push('80円切手は はみ出し ÷ たて');
+    if(d!==6) h.push('50円切手は 10 − 80円切手の枚数');
+    fb.innerHTML='<span class="ng">ヒント:'+h.join(' / ')+'</span>';
+  }
+}
+go(0);
+</script>
+</body>
+</html>
