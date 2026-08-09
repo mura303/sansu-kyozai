@@ -130,6 +130,9 @@ curl -sS -o /dev/null -w "%{http_code}\n" "${SITE_URL}kabusokuzan-kyozai.html"  
 
 ## 以後の運用: 新しい教材の追加
 
+**新しい教材HTMLを自分で作成する場合は、必ず先に `KYOZAI_GUIDE.md`(教材作成ガイド)を読むこと。**
+教育設計の原則・UIパターン・技術規約・公開前チェックリストが定義されている。
+
 新しい教材HTMLをリポジトリ直下に置いて push するだけで、目次に自動追加されて公開される:
 
 ```bash
