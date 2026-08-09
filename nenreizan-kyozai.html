@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="母38歳・子10歳。母が子の3倍になるのは何年後? 「差は変わらない」を発見する14ステップ。">
+<meta name="course-order" content="1">
+<title>年齢算マスター — 表と線分図を14ステップで</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFBF7; --grid:#E7ECE4; --ink:#243247; --ink-soft:#5C6B82;
+  --kid:#1D9E75; --kid-bg:#DFF4EB; --kid-dark:#0A5540;
+  --mom:#D85A30; --mom-bg:#FBE8DF; --mom-dark:#8A3315;
+  --marker:#FFE9A8; --ok:#1D7A46; --ok-bg:#E4F4E9; --ng:#C0442B; --ng-bg:#FBEAE5;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Zen Maru Gothic",system-ui,sans-serif;
+  color:var(--ink); background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  min-height:100vh; line-height:1.8;
+}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 80px}
+header h1{font-size:26px;font-weight:700;margin:0 0 4px;letter-spacing:.02em}
+header p{margin:0 0 24px;color:var(--ink-soft);font-size:14px}
+.card{
+  background:#fff;border:2px solid var(--ink);border-radius:var(--radius);
+  padding:28px 28px 24px; box-shadow:6px 6px 0 rgba(36,50,71,.12);
+}
+.progressbar{display:flex;align-items:center;gap:12px;margin:0 0 20px}
+.prog-label{font-size:13px;font-weight:700;min-width:64px;color:var(--ink-soft)}
+.track{flex:1;height:10px;background:var(--grid);border-radius:5px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--kid);border-radius:5px;transition:width .35s ease}
+.backbtn{font-family:inherit;font-size:13px;padding:6px 14px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;cursor:pointer}
+.backbtn:hover{background:var(--grid)}
+.jumpnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px}
+.jump{font-family:inherit;font-size:13px;font-weight:700;min-width:34px;height:34px;padding:0 8px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer}
+.jump:hover{background:var(--grid)}
+.jump.here{background:var(--kid);border-color:var(--kid-dark);color:#fff}
+.step-tag{display:inline-block;background:var(--ink);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 0 12px;letter-spacing:.05em}
+.q{font-size:17px;font-weight:500;margin:0 0 18px}
+.problem{background:var(--marker);border-radius:8px;padding:14px 18px;font-size:16px;font-weight:500;margin:0 0 18px}
+.note{font-size:13.5px;color:var(--ink-soft);margin:12px 0 0}
+button.choice, button.action, button.next{
+  font-family:inherit;font-size:15.5px;font-weight:500;color:var(--ink);
+  background:#fff;border:2px solid var(--ink);border-radius:10px;
+  padding:10px 18px;margin:4px 8px 4px 0;cursor:pointer;
+  transition:transform .08s ease, background .15s ease;
+}
+button.choice:hover,button.action:hover,button.next:hover{background:var(--grid)}
+button.choice:active,button.action:active{transform:scale(.97)}
+button:focus-visible{outline:3px solid var(--kid);outline-offset:2px}
+button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+button.next{background:var(--kid);border-color:var(--kid-dark);color:#fff;display:block;margin-top:14px}
+button.next:hover{background:var(--kid-dark)}
+.fb{min-height:26px;margin-top:14px;font-size:14.5px;font-weight:500}
+.fb .ok{color:var(--ok);background:var(--ok-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+.fb .ng{color:var(--ng);background:var(--ng-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+table.age{border-collapse:collapse;margin:0 0 14px;font-size:15px}
+table.age th,table.age td{border:1.5px solid var(--ink);padding:7px 18px;text-align:center;background:#fff}
+table.age th{background:var(--grid);font-weight:700}
+table.age tr.pick{cursor:pointer}
+table.age tr.pick:hover td{background:var(--marker)}
+table.age tr.won td{background:var(--ok-bg)}
+.tape-row{display:flex;align-items:center;gap:6px;margin:0 0 8px}
+.tape-label{width:36px;font-weight:700;font-size:15px;color:var(--ink-soft)}
+.unit{
+  width:96px;height:40px;display:flex;align-items:center;justify-content:center;
+  border-radius:6px;font-weight:700;font-size:16px;border:2px solid;
+}
+.uk{background:var(--kid-bg);border-color:var(--kid);color:var(--kid-dark)}
+.um{background:var(--mom-bg);border-color:var(--mom);color:var(--mom-dark)}
+.brace{margin:2px 0 16px 42px;width:200px;border-bottom:2.5px solid var(--ink);text-align:center;font-size:13px;color:var(--ink-soft);padding-bottom:3px}
+input[type=number]{
+  font-family:inherit;font-size:16px;width:90px;text-align:center;
+  border:2px solid var(--ink);border-radius:8px;padding:8px 6px;background:#fff;
+}
+input[type=number]:focus-visible{outline:3px solid var(--kid);outline-offset:1px}
+.fillrow{font-size:15.5px;margin:0 0 12px}
+.hidden{display:none}
+@media (prefers-reduced-motion: reduce){ .fill{transition:none} button{transition:none} }
+@media (max-width:520px){ .card{padding:20px 16px} .unit{width:72px} .brace{width:152px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>年齢算マスター</h1>
+  <p>表 → 線分図の順に、14個の小さなステップでゆっくり進みます</p>
+</header>
+
+<div class="progressbar">
+  <span class="prog-label" id="prog">1 / 14</span>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <button class="backbtn" id="prevb" onclick="go(cur-1)">← 戻る</button>
+</div>
+
+<nav class="jumpnav" id="jumpnav" aria-label="ステップへジャンプ"></nav>
+
+<div class="card">
+
+<section class="panel" id="p0">
+  <span class="step-tag">はじめに</span>
+  <p class="problem">【問題】いま、お母さんは 38歳、子どもは 10歳。お母さんの年齢が子どもの年齢のちょうど 3倍 になるのは、いまから何年後?</p>
+  <p class="q">いきなり解かなくて大丈夫。ひとつずつ進めば、最後には自分の力で解けるようになります。</p>
+  <button class="next" onclick="go(1)">はじめる →</button>
+</section>
+
+<section class="panel hidden" id="p1">
+  <span class="step-tag">ステップ 1</span>
+  <p class="q">1年後、ふたりは何歳になっている?</p>
+  <button class="choice" onclick="mc(this,false,1)">子11歳・母38歳</button>
+  <button class="choice" onclick="mc(this,true,1,'ふたりとも1年で1歳ずつ増える。これが年齢算のいちばん大事なルール。')">子11歳・母39歳</button>
+  <button class="choice" onclick="mc(this,false,1)">子10歳・母39歳</button>
+  <div class="fb" id="f1"></div>
+</section>
+
+<section class="panel hidden" id="p2">
+  <span class="step-tag">ステップ 2</span>
+  <p class="q">「+1年」を押して、表を3年後まで育ててみよう。</p>
+  <table class="age" id="t1">
+    <tr><th>いつ</th><th>子</th><th>母</th></tr>
+    <tr><td>今</td><td>10</td><td>38</td></tr>
+  </table>
+  <button class="action" id="b1" onclick="addRow()">+1年</button>
+  <div class="fb" id="f2"></div>
+</section>
+
+<section class="panel hidden" id="p3">
+  <span class="step-tag">ステップ 3</span>
+  <p class="q">「差を計算」を押して、母 − 子 の差をうめていこう。</p>
+  <table class="age" id="t2">
+    <tr><th>いつ</th><th>子</th><th>母</th><th>差</th></tr>
+    <tr><td>今</td><td>10</td><td>38</td><td id="d0"></td></tr>
+    <tr><td>1年後</td><td>11</td><td>39</td><td id="d1"></td></tr>
+    <tr><td>2年後</td><td>12</td><td>40</td><td id="d2"></td></tr>
+    <tr><td>3年後</td><td>13</td><td>41</td><td id="d3"></td></tr>
+  </table>
+  <button class="action" onclick="fillDiff()">差を計算</button>
+  <div class="fb" id="f3"></div>
+</section>
+
+<section class="panel hidden" id="p4">
+  <span class="step-tag">ステップ 4</span>
+  <p class="q">さっき完成させた表がこれ。これを見て答えよう。5年後の差はいくつ?</p>
+  <table class="age">
+    <tr><th>いつ</th><th>子</th><th>母</th><th>差</th></tr>
+    <tr><td>今</td><td>10</td><td>38</td><td>28</td></tr>
+    <tr><td>1年後</td><td>11</td><td>39</td><td>28</td></tr>
+    <tr><td>2年後</td><td>12</td><td>40</td><td>28</td></tr>
+    <tr><td>3年後</td><td>13</td><td>41</td><td>28</td></tr>
+  </table>
+  <button class="choice" onclick="mc(this,false,4)">33</button>
+  <button class="choice" onclick="mc(this,true,4,'表のつづきを頭の中でのばせたね。')">28</button>
+  <button class="choice" onclick="mc(this,false,4)">23</button>
+  <div class="fb" id="f4"></div>
+</section>
+
+<section class="panel hidden" id="p5">
+  <span class="step-tag">ステップ 5</span>
+  <p class="q">では表にない、ずっと先のこと。表のつづきを想像して — 100年後の差はいくつ?</p>
+  <table class="age">
+    <tr><th>いつ</th><th>子</th><th>母</th><th>差</th></tr>
+    <tr><td>今</td><td>10</td><td>38</td><td>28</td></tr>
+    <tr><td>1年後</td><td>11</td><td>39</td><td>28</td></tr>
+    <tr><td>2年後</td><td>12</td><td>40</td><td>28</td></tr>
+    <tr><td>3年後</td><td>13</td><td>41</td><td>28</td></tr>
+    <tr><td>⋮</td><td>⋮</td><td>⋮</td><td>⋮</td></tr>
+    <tr><td>100年後</td><td>110</td><td>138</td><td>?</td></tr>
+  </table>
+  <button class="choice" onclick="mc(this,false,5)">128</button>
+  <button class="choice" onclick="mc(this,true,5,'大発見! ふたりとも同じだけ年をとるから、差は何年たっても 28 のまま変わらない。')">28</button>
+  <button class="choice" onclick="mc(this,false,5)">わからない</button>
+  <div class="fb" id="f5"></div>
+</section>
+
+<section class="panel hidden" id="p6">
+  <span class="step-tag">ステップ 6</span>
+  <p class="q">表を6年後までのばしました。母が子のちょうど3倍になっている行をタップ!</p>
+  <table class="age" id="t3"><tr><th>いつ</th><th>子</th><th>母</th><th>差</th></tr></table>
+  <div class="fb" id="f6"></div>
+</section>
+
+<section class="panel hidden" id="p7">
+  <span class="step-tag">ステップ 7</span>
+  <p class="q">ここから線分図。子どもの年齢を ① という1本のテープで表します。まだこれだけ!</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk">①</span></div>
+  <p class="note">①は「子どもの年齢1つぶん」という意味。何歳かはまだ考えません。</p>
+  <button class="next" onclick="go(8)">次へ →</button>
+</section>
+
+<section class="panel hidden" id="p8">
+  <span class="step-tag">ステップ 8</span>
+  <p class="q">母は子の3倍。では母のテープは、①が何個ぶん?</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk">①</span></div>
+  <div class="tape-row"><span class="tape-label">母</span><span id="momunits"></span></div>
+  <button class="choice" onclick="mc(this,false,8)">2個</button>
+  <button class="choice" onclick="momOk(this)">3個</button>
+  <button class="choice" onclick="mc(this,false,8)">4個</button>
+  <div class="fb" id="f8"></div>
+</section>
+
+<section class="panel hidden" id="p9">
+  <span class="step-tag">ステップ 9</span>
+  <p class="q">母と子のテープの「差」の部分は、①が何個ぶん?</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk">①</span></div>
+  <div class="tape-row"><span class="tape-label">母</span><span class="unit um">①</span><span class="unit um">①</span><span class="unit um">①</span></div>
+  <div class="brace" style="margin-left:144px">← この部分 →</div>
+  <button class="choice" onclick="mc(this,false,9)">①1個ぶん</button>
+  <button class="choice" onclick="mc(this,true,9,'そう、3個 − 1個 = ②ぶんが差。')">①2個ぶん</button>
+  <button class="choice" onclick="mc(this,false,9)">①3個ぶん</button>
+  <div class="fb" id="f9"></div>
+</section>
+
+<section class="panel hidden" id="p10">
+  <span class="step-tag">ステップ 10</span>
+  <p class="q">ステップ5で発見したこと:差は 38 − 10 = 28歳 で、ずっと変わらない。線分図では差は②ぶんだったから、② = 28歳。では ① は何歳?</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk">①</span></div>
+  <div class="tape-row"><span class="tape-label">母</span><span class="unit um">①</span><span class="unit um">①</span><span class="unit um">①</span></div>
+  <div class="brace" style="margin-left:144px">② = 38 − 10 = 28歳</div>
+  <p class="fillrow">① = <input type="number" id="i10" placeholder="?"> 歳</p>
+  <button class="action" onclick="ck(10,14,'② = 28 だから ① = 28 ÷ 2 = 14歳!')">答え合わせ</button>
+  <div class="fb" id="f10"></div>
+</section>
+
+<section class="panel hidden" id="p11">
+  <span class="step-tag">ステップ 11</span>
+  <p class="q">① = 14歳 とわかった。つまり「子が14歳のとき」に母は3倍になる。いま子は10歳。何年後?</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk" style="width:auto;padding:0 14px">① = 14歳</span></div>
+  <div class="tape-row"><span class="tape-label">母</span><span class="unit um">14歳</span><span class="unit um">14歳</span><span class="unit um">14歳</span></div>
+  <p class="note">母は 14 × 3 = 42歳。たしかに3倍になっている。</p>
+  <button class="choice" onclick="mc(this,false,11)">3年後</button>
+  <button class="choice" onclick="mc(this,true,11,'14 − 10 = 4年後。ステップ6で表から見つけた答えと同じ!')">4年後</button>
+  <button class="choice" onclick="mc(this,false,11)">14年後</button>
+  <div class="fb" id="f11"></div>
+</section>
+
+<section class="panel hidden" id="p12">
+  <span class="step-tag">ステップ 12</span>
+  <p class="q">流れをおさらい。線分図で解くときの正しい順番はどれ?</p>
+  <button class="choice" onclick="mc(this,true,12,'この3ステップが線分図の「型」。どんな数字でも同じ手順で解けます。')">差を出す → ②=差 → ①を求める</button>
+  <button class="choice" onclick="mc(this,false,12)">母÷3をする → 終わり</button>
+  <div class="fb" id="f12"></div>
+</section>
+
+<section class="panel hidden" id="p13">
+  <span class="step-tag">ステップ 13</span>
+  <p class="q">練習問題:「母40歳、子8歳。母が子の3倍になるのは何年後?」線分図の型はさっきと同じ。3つの空らんをうめよう。</p>
+  <div class="tape-row"><span class="tape-label">子</span><span class="unit uk">①</span></div>
+  <div class="tape-row"><span class="tape-label">母</span><span class="unit um">①</span><span class="unit um">①</span><span class="unit um">①</span></div>
+  <div class="brace" style="margin-left:144px">② = 差</div>
+  <p class="fillrow">差 = 40 − 8 = <input type="number" id="j1" placeholder="?"> 歳(= ②ぶん)</p>
+  <p class="fillrow">① = <input type="number" id="j2" placeholder="?"> 歳</p>
+  <p class="fillrow">答え:<input type="number" id="j3" placeholder="?"> 年後</p>
+  <button class="action" onclick="ckAll()">答え合わせ</button>
+  <div class="fb" id="f13"></div>
+</section>
+
+<section class="panel hidden" id="p14">
+  <span class="step-tag">ゴール!</span>
+  <p class="q">全ステップ完了! 「差は変わらない」→「差が②ぶん」→「①を求める」の型が、表と線分図の両方でつながりました。</p>
+  <p class="note">もう一度最初からやると、今度はスラスラ進めるはず。それが「習得できた」の合図です。</p>
+  <button class="next" onclick="go(0)">最初からやり直す</button>
+</section>
+
+</div>
+</div>
+
+<script>
+var P = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+var cur = 0;
+(function(){
+  var nav=document.getElementById('jumpnav');
+  var labels=['始','1','2','3','4','5','6','7','8','9','10','11','12','13','終'];
+  labels.forEach(function(lb,i){
+    var b=document.createElement('button');
+    b.className='jump'; b.textContent=lb; b.id='jb'+i;
+    b.setAttribute('aria-label', i===0?'はじめに':(i===labels.length-1?'ゴール':'ステップ'+lb));
+    b.onclick=function(){ go(i); };
+    nav.appendChild(b);
+  });
+})();
+function go(i){
+  if(i<0||i>=P.length) return;
+  cur=i;
+  P.forEach(function(p,j){ p.classList.toggle('hidden', j!==i); });
+  document.getElementById('prog').textContent = (i+1)+' / '+P.length;
+  document.getElementById('fill').style.width = Math.round((i+1)/P.length*100)+'%';
+  document.getElementById('prevb').style.visibility = (i===0)?'hidden':'visible';
+  P.forEach(function(_,j){
+    var b=document.getElementById('jb'+j);
+    if(b) b.classList.toggle('here', j===i);
+  });
+}
+function nextBtn(fb,i){
+  if(fb.querySelector('button.next')) return;
+  var b=document.createElement('button');
+  b.textContent='次へ →'; b.className='next';
+  b.onclick=function(){ go(i+1); };
+  fb.appendChild(b);
+}
+function mc(btn,ok,step,msg){
+  var fb=document.getElementById('f'+step);
+  if(ok){
+    fb.innerHTML='<span class="ok">正解! '+(msg||'')+'</span>';
+    btn.classList.add('correct');
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">おしい! ふたりとも1年で1歳ずつ年をとることを思い出そう。</span>';
+  }
+}
+var rows=0;
+function addRow(){
+  if(rows>=3) return;
+  rows++;
+  var t=document.getElementById('t1');
+  var r=t.insertRow(-1);
+  r.innerHTML='<td>'+rows+'年後</td><td>'+(10+rows)+'</td><td>'+(38+rows)+'</td>';
+  if(rows===3){
+    var fb=document.getElementById('f2');
+    fb.innerHTML='<span class="ok">できた! 子も母も1ずつ増えていくだけ。</span>';
+    nextBtn(fb,2);
+  }
+}
+var dif=0;
+function fillDiff(){
+  if(dif>3) return;
+  document.getElementById('d'+dif).textContent='28';
+  dif++;
+  if(dif===4){
+    var fb=document.getElementById('f3');
+    fb.innerHTML='<span class="ok">全部 28! 何かに気づいた?</span>';
+    nextBtn(fb,3);
+  }
+}
+(function(){
+  var t3=document.getElementById('t3');
+  for(var n=0;n<=6;n++){
+    (function(n){
+      var r=t3.insertRow(-1);
+      r.className='pick';
+      r.innerHTML='<td>'+(n===0?'今':n+'年後')+'</td><td>'+(10+n)+'</td><td>'+(38+n)+'</td><td>28</td>';
+      r.onclick=function(){
+        var fb=document.getElementById('f6');
+        if(n===4){
+          r.classList.add('won');
+          fb.innerHTML='<span class="ok">正解! 4年後、子14歳 × 3 = 母42歳。表だけで解けた!</span>';
+          nextBtn(fb,6);
+        }else{
+          fb.innerHTML='<span class="ng">その行は 母 ÷ 子 が3にならないよ。母の数が子の3倍の行をさがそう。</span>';
+        }
+      };
+    })(n);
+  }
+})();
+function momOk(btn){
+  document.getElementById('momunits').innerHTML=
+    '<span class="unit um">①</span><span class="unit um" style="margin-left:6px">①</span><span class="unit um" style="margin-left:6px">①</span>';
+  mc(btn,true,8,'母のテープは ① × 3 = ③ぶん。');
+}
+function ck(step,ans,msg){
+  var v=Number(document.getElementById('i'+step).value);
+  var fb=document.getElementById('f'+step);
+  if(v===ans){
+    fb.innerHTML='<span class="ok">正解! '+msg+'</span>';
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">②が28歳なら、①はその半分だね。</span>';
+  }
+}
+function ckAll(){
+  var a=Number(document.getElementById('j1').value);
+  var b=Number(document.getElementById('j2').value);
+  var c=Number(document.getElementById('j3').value);
+  var fb=document.getElementById('f13');
+  if(a===32&&b===16&&c===8){
+    fb.innerHTML='<span class="ok">全問正解! 差32 = ② → ① = 16歳 → 16 − 8 = 8年後。</span>';
+    nextBtn(fb,13);
+  }else{
+    var h=[];
+    if(a!==32) h.push('差は 40 − 8');
+    if(b!==16) h.push('①は差の半分');
+    if(c!==8) h.push('年後は 16 − いまの子の年齢');
+    fb.innerHTML='<span class="ng">ヒント:'+h.join(' / ')+'</span>';
+  }
+}
+go(0);
+</script>
+</body>
+</html>

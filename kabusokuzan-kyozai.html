@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5本ずつだと31本あまり、10本ずつだと34本不足。「あまり+不足=差」を発見する16ステップ。">
+<meta name="course-order" content="2">
+<title>過不足算マスター — えんぴつ問題を16ステップで</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAFBF7; --grid:#E7ECE4; --ink:#243247; --ink-soft:#5C6B82;
+  --kid:#1D9E75; --kid-bg:#DFF4EB; --kid-dark:#0A5540;
+  --mom:#D85A30; --mom-bg:#FBE8DF; --mom-dark:#8A3315;
+  --marker:#FFE9A8; --ok:#1D7A46; --ok-bg:#E4F4E9; --ng:#C0442B; --ng-bg:#FBEAE5;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Zen Maru Gothic",system-ui,sans-serif;
+  color:var(--ink); background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  min-height:100vh; line-height:1.8;
+}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 80px}
+header h1{font-size:26px;font-weight:700;margin:0 0 4px;letter-spacing:.02em}
+header p{margin:0 0 24px;color:var(--ink-soft);font-size:14px}
+.card{
+  background:#fff;border:2px solid var(--ink);border-radius:var(--radius);
+  padding:28px 28px 24px; box-shadow:6px 6px 0 rgba(36,50,71,.12);
+}
+.progressbar{display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.prog-label{font-size:13px;font-weight:700;min-width:64px;color:var(--ink-soft)}
+.track{flex:1;height:10px;background:var(--grid);border-radius:5px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--kid);border-radius:5px;transition:width .35s ease}
+.backbtn{font-family:inherit;font-size:13px;padding:6px 14px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;cursor:pointer}
+.backbtn:hover{background:var(--grid)}
+.jumpnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 20px}
+.jump{font-family:inherit;font-size:13px;font-weight:700;min-width:34px;height:34px;padding:0 8px;border:1.5px solid var(--ink);border-radius:8px;background:#fff;color:var(--ink);cursor:pointer}
+.jump:hover{background:var(--grid)}
+.jump.here{background:var(--kid);border-color:var(--kid-dark);color:#fff}
+.step-tag{display:inline-block;background:var(--ink);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:3px 12px;margin:0 0 12px;letter-spacing:.05em}
+.q{font-size:17px;font-weight:500;margin:0 0 18px}
+.problem{background:var(--marker);border-radius:8px;padding:14px 18px;font-size:16px;font-weight:500;margin:0 0 18px}
+.note{font-size:13.5px;color:var(--ink-soft);margin:12px 0 0}
+button.choice, button.action, button.next{
+  font-family:inherit;font-size:15.5px;font-weight:500;color:var(--ink);
+  background:#fff;border:2px solid var(--ink);border-radius:10px;
+  padding:10px 18px;margin:4px 8px 4px 0;cursor:pointer;
+  transition:transform .08s ease, background .15s ease;
+}
+button.choice:hover,button.action:hover,button.next:hover{background:var(--grid)}
+button.choice:active,button.action:active{transform:scale(.97)}
+button:focus-visible{outline:3px solid var(--kid);outline-offset:2px}
+button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+button.next{background:var(--kid);border-color:var(--kid-dark);color:#fff;display:block;margin-top:14px}
+button.next:hover{background:var(--kid-dark)}
+.fb{min-height:26px;margin-top:14px;font-size:14.5px;font-weight:500}
+.fb .ok{color:var(--ok);background:var(--ok-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+.fb .ng{color:var(--ng);background:var(--ng-bg);border-radius:8px;padding:8px 12px;display:inline-block}
+table.age{border-collapse:collapse;margin:0 0 14px;font-size:14.5px}
+table.age th,table.age td{border:1.5px solid var(--ink);padding:7px 12px;text-align:center;background:#fff}
+table.age th{background:var(--grid);font-weight:700}
+table.age tr.pick{cursor:pointer}
+table.age tr.pick:hover td{background:var(--marker)}
+table.age tr.won td{background:var(--ok-bg)}
+.tapes{margin:0 0 6px}
+.trow{display:flex;align-items:center;margin:0 0 8px}
+.tlabel{width:92px;font-weight:700;font-size:13px;color:var(--ink-soft);flex:none}
+.tape{height:38px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;border:2px solid;border-radius:6px;flex:none}
+.tp-total{background:#fff;border-color:var(--ink);color:var(--ink)}
+.tp5{background:var(--kid-bg);border-color:var(--kid);color:var(--kid-dark)}
+.tp10{background:var(--mom-bg);border-color:var(--mom);color:var(--mom-dark)}
+.tp-gap{border:2px dashed var(--ink-soft);color:var(--ink-soft);background:transparent;margin-left:4px}
+.tp-over{background:var(--mom);border-color:var(--mom-dark);color:#fff;margin-left:4px}
+.brace{border-bottom:2.5px solid var(--ink);text-align:center;font-size:13px;color:var(--ink-soft);padding-bottom:3px;margin:2px 0 16px}
+input[type=number]{
+  font-family:inherit;font-size:16px;width:90px;text-align:center;
+  border:2px solid var(--ink);border-radius:8px;padding:8px 6px;background:#fff;
+}
+input[type=number]:focus-visible{outline:3px solid var(--kid);outline-offset:1px}
+.fillrow{font-size:15.5px;margin:0 0 12px}
+.hidden{display:none}
+@media (prefers-reduced-motion: reduce){ .fill{transition:none} button{transition:none} }
+@media (max-width:560px){
+  .card{padding:20px 14px}
+  .tlabel{width:70px;font-size:12px}
+  .tape{height:34px;font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>過不足算マスター</h1>
+  <p>「あまり」と「不足」の問題を、表 → 線分図の16ステップで</p>
+</header>
+
+<div class="progressbar">
+  <span class="prog-label" id="prog">1 / 18</span>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <button class="backbtn" id="prevb" onclick="go(cur-1)">← 戻る</button>
+</div>
+
+<nav class="jumpnav" id="jumpnav" aria-label="ステップへジャンプ"></nav>
+
+<div class="card">
+
+<section class="panel" id="p0">
+  <span class="step-tag">はじめに</span>
+  <p class="problem">【問題】□人の子どもにえんぴつを分けます。1人に 5本ずつ 分けると 31本あまり、1人に 10本ずつ 分けると 34本不足 します。子どもの人数と、えんぴつの本数を求めましょう。</p>
+  <p class="q">人数もえんぴつの本数もわからない、ちょっと手ごわい問題。でも小さなステップに分ければ大丈夫。</p>
+  <button class="next" onclick="go(1)">はじめる →</button>
+</section>
+
+<section class="panel hidden" id="p1">
+  <span class="step-tag">ステップ 1</span>
+  <p class="q">まず言葉の確認。「5本ずつ分けると31本あまる」とはどういう意味?</p>
+  <button class="choice" onclick="mc(this,true,1,'全員に5本ずつ配り終えても、手もとに31本残っているということ。')">全員に配ったあと、えんぴつが31本残る</button>
+  <button class="choice" onclick="mc(this,false,1,'「あまる」は残ること。足りないのは「不足」のほう。')">えんぴつが31本足りない</button>
+  <div class="fb" id="f1"></div>
+</section>
+
+<section class="panel hidden" id="p2">
+  <span class="step-tag">ステップ 2</span>
+  <p class="q">「10本ずつ分けると34本不足」とはどういう意味?</p>
+  <button class="choice" onclick="mc(this,false,2,'「不足」は足りないこと。残るのは「あまり」のほう。')">全員に配ったあと、34本残る</button>
+  <button class="choice" onclick="mc(this,true,2,'あと34本あれば、全員に10本ずつ配れた、ということ。')">あと34本あれば全員に10本ずつ配れる</button>
+  <div class="fb" id="f2"></div>
+</section>
+
+<section class="panel hidden" id="p3">
+  <span class="step-tag">ステップ 3</span>
+  <p class="q">人数がわからないなら、仮に決めてみよう。もし子どもが 10人 だったら —「5本ずつで31あまる」から考えると、えんぴつは全部で何本?</p>
+  <p class="fillrow">5 × 10 + 31 = <input type="number" id="i3" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(3,81,'配った 50本 + あまり 31本 = 81本。')">答え合わせ</button>
+  <div class="fb" id="f3"></div>
+</section>
+
+<section class="panel hidden" id="p4">
+  <span class="step-tag">ステップ 4</span>
+  <p class="q">同じく10人として、今度は「10本ずつで34不足」から考えると、えんぴつは何本?</p>
+  <p class="fillrow">10 × 10 − 34 = <input type="number" id="i4" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(4,66,'必要な 100本 より 34本 少ないから 66本。')">答え合わせ</button>
+  <div class="fb" id="f4"></div>
+</section>
+
+<section class="panel hidden" id="p5">
+  <span class="step-tag">ステップ 5</span>
+  <p class="q">おかしい! 同じえんぴつのはずなのに、81本と66本で答えが合わない。くいちがいは何本?</p>
+  <p class="fillrow">81 − 66 = <input type="number" id="i5" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(5,15,'くいちがいが 15本。つまり「10人」はまちがい。人数を変えて調べてみよう。')">答え合わせ</button>
+  <div class="fb" id="f5"></div>
+</section>
+
+<section class="panel hidden" id="p6">
+  <span class="step-tag">ステップ 6</span>
+  <p class="q">「+1人」を押して、人数を増やしながら表を育てよう。くいちがいが 0 になったら正解の人数!</p>
+  <table class="age" id="t1">
+    <tr><th>人数</th><th>5本ずつ<br>+あまり31</th><th>10本ずつ<br>−不足34</th><th>くいちがい</th></tr>
+    <tr><td>10人</td><td>81</td><td>66</td><td>15</td></tr>
+  </table>
+  <button class="action" onclick="addRow()">+1人</button>
+  <div class="fb" id="f6"></div>
+</section>
+
+<section class="panel hidden" id="p7">
+  <span class="step-tag">ステップ 7</span>
+  <p class="q">いま育てた表がこれ。くいちがいは、1人増えるごとにいくつずつ減っていった?</p>
+  <table class="age">
+    <tr><th>人数</th><th>5本ずつ+31</th><th>10本ずつ−34</th><th>くいちがい</th></tr>
+    <tr><td>10人</td><td>81</td><td>66</td><td>15</td></tr>
+    <tr><td>11人</td><td>86</td><td>76</td><td>10</td></tr>
+    <tr><td>12人</td><td>91</td><td>86</td><td>5</td></tr>
+    <tr><td>13人</td><td>96</td><td>96</td><td>0</td></tr>
+  </table>
+  <button class="choice" onclick="mc(this,false,7,'表のくいちがいの列を上から順に見てみよう。15 → 10 → 5 → 0。')">3ずつ</button>
+  <button class="choice" onclick="mc(this,true,7,'15 → 10 → 5 → 0。きれいに5ずつ減っている。')">5ずつ</button>
+  <button class="choice" onclick="mc(this,false,7,'表のくいちがいの列を上から順に見てみよう。15 → 10 → 5 → 0。')">10ずつ</button>
+  <div class="fb" id="f7"></div>
+</section>
+
+<section class="panel hidden" id="p8">
+  <span class="step-tag">ステップ 8</span>
+  <p class="q">なぜ1人増えるとくいちがいが「5」縮まるんだろう?</p>
+  <button class="choice" onclick="mc(this,true,8,'1人あたり 10 − 5 = 5本 の差。これが人数のぶんだけ積み重なっている。')">1人あたり 10 − 5 = 5本 の差があるから</button>
+  <button class="choice" onclick="mc(this,false,8,'31や34は全体の話。1人あたりの配り方のちがいに注目しよう。')">あまりの31本が減っていくから</button>
+  <div class="fb" id="f8"></div>
+</section>
+
+<section class="step-tag-holder panel hidden" id="p9">
+  <span class="step-tag">ステップ 9</span>
+  <p class="q">表の答えを読み取ろう。くいちがいが 0 の行をタップ!</p>
+  <table class="age" id="t3"><tr><th>人数</th><th>5本ずつ+31</th><th>10本ずつ−34</th><th>くいちがい</th></tr></table>
+  <div class="fb" id="f9"></div>
+</section>
+
+<section class="panel hidden" id="p10">
+  <span class="step-tag">ステップ 10</span>
+  <p class="q">ここから線分図。えんぴつの総数を白いテープで表します。「5本ずつ配るのに必要な本数(5×人数)」の緑のテープは、総数より 31本 —— どっち?</p>
+  <div class="tapes">
+    <div class="trow"><span class="tlabel">総数</span><span class="tape tp-total" style="width:240px">えんぴつの総数</span></div>
+    <div class="trow"><span class="tlabel">5×人数</span><span class="tape tp5" style="width:163px">5×人数</span><span class="tape tp-gap" style="width:73px">?</span></div>
+  </div>
+  <button class="choice" onclick="mc(this,true,10,'31本あまる = 配る本数は総数より31本少ない。だからテープは短い。')">31本 短い</button>
+  <button class="choice" onclick="mc(this,false,10,'「あまる」ということは、配るのに使う本数は総数より少ないはず。')">31本 長い</button>
+  <div class="fb" id="f10"></div>
+</section>
+
+<section class="panel hidden" id="p11">
+  <span class="step-tag">ステップ 11</span>
+  <p class="q">では「10本ずつ配るのに必要な本数(10×人数)」のオレンジのテープは、総数より 34本 —— どっち?</p>
+  <div class="tapes">
+    <div class="trow"><span class="tlabel">総数</span><span class="tape tp-total" style="width:240px">えんぴつの総数</span></div>
+    <div class="trow"><span class="tlabel">10×人数</span><span class="tape tp10" style="width:240px">10×人数</span><span class="tape tp-over" style="width:81px">?</span></div>
+  </div>
+  <button class="choice" onclick="mc(this,false,11,'「不足する」ということは、必要な本数は総数より多いはず。')">34本 短い</button>
+  <button class="choice" onclick="mc(this,true,11,'34本不足 = 必要な本数は総数より34本多い。だからテープははみ出す。')">34本 長い</button>
+  <div class="fb" id="f11"></div>
+</section>
+
+<section class="panel hidden" id="p12">
+  <span class="step-tag">ステップ 12</span>
+  <p class="q">3本ならべてみた。緑のテープとオレンジのテープの長さの差は何本? (ここがいちばんの山場!)</p>
+  <div class="tapes">
+    <div class="trow"><span class="tlabel">5×人数</span><span class="tape tp5" style="width:163px">5×人数</span><span class="tape tp-gap" style="width:73px">31本</span></div>
+    <div class="trow"><span class="tlabel">総数</span><span class="tape tp-total" style="width:240px">えんぴつの総数</span></div>
+    <div class="trow"><span class="tlabel">10×人数</span><span class="tape tp10" style="width:240px">10×人数</span><span class="tape tp-over" style="width:81px">34本</span></div>
+    <div class="brace" style="margin-left:255px;width:158px">この差 = ?本</div>
+  </div>
+  <p class="fillrow">差 = 31 + 34 = <input type="number" id="i12" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(12,65,'総数より31本手前から、総数より34本先まで。だから差は 31 + 34 = 65本!')">答え合わせ</button>
+  <div class="fb" id="f12"></div>
+</section>
+
+<section class="panel hidden" id="p13">
+  <span class="step-tag">ステップ 13</span>
+  <p class="q">この65本の差は、どうして生まれた? 表で発見したことを思い出そう。</p>
+  <button class="choice" onclick="mc(this,true,13,'1人あたり 5本 の差 × 人数ぶん = 65本。ということは…?')">1人あたり 10−5 = 5本 の差が、人数ぶん集まったもの</button>
+  <button class="choice" onclick="mc(this,false,13,'31も34も「全体で」の話。差が積み重なる正体は、1人あたりの配り方のちがい。')">あまりの31本が2倍になったもの</button>
+  <div class="fb" id="f13"></div>
+</section>
+
+<section class="panel hidden" id="p14">
+  <span class="step-tag">ステップ 14</span>
+  <p class="q">「1人あたり5本の差が人数ぶん集まって65本」。では人数は?</p>
+  <p class="fillrow">人数 = 65 ÷ 5 = <input type="number" id="i14" placeholder="?"> 人</p>
+  <button class="action" onclick="ck(14,13,'65 ÷ 5 = 13人。表で見つけた答えと同じ!')">答え合わせ</button>
+  <div class="fb" id="f14"></div>
+</section>
+
+<section class="panel hidden" id="p15">
+  <span class="step-tag">ステップ 15</span>
+  <p class="q">最後に、えんぴつの本数を求めよう。13人に5本ずつ配ると31本あまるのだから…</p>
+  <p class="fillrow">5 × 13 + 31 = <input type="number" id="i15" placeholder="?"> 本</p>
+  <button class="action" onclick="ck(15,96,'96本! 検算:10 × 13 − 34 = 96本。2つの式でぴったり同じになった。')">答え合わせ</button>
+  <div class="fb" id="f15"></div>
+</section>
+
+<section class="panel hidden" id="p16">
+  <span class="step-tag">ステップ 16</span>
+  <p class="q">練習問題:「□人に4本ずつ配ると20本あまり、7本ずつ配ると16本不足します」。4つの空らんをうめよう。</p>
+  <p class="fillrow">差 = 20 + 16 = <input type="number" id="j1" placeholder="?"> 本</p>
+  <p class="fillrow">1人あたりの差 = 7 − 4 = <input type="number" id="j2" placeholder="?"> 本</p>
+  <p class="fillrow">人数 = <input type="number" id="j3" placeholder="?"> 人</p>
+  <p class="fillrow">えんぴつ = <input type="number" id="j4" placeholder="?"> 本</p>
+  <button class="action" onclick="ckAll()">答え合わせ</button>
+  <div class="fb" id="f16"></div>
+</section>
+
+<section class="panel hidden" id="p17">
+  <span class="step-tag">ゴール!</span>
+  <p class="q">全ステップ完了! 過不足算の型は「あまり + 不足 = 全体の差」→「÷ 1人あたりの差 = 人数」。表で理由を体感してから図の型を使う、年齢算と同じ流れでした。</p>
+  <p class="note">あまり同士・不足同士の問題では差の計算が「たし算」ではなく「ひき算」になります。次はそのパターンに挑戦してみよう。</p>
+  <button class="next" onclick="go(0)">最初からやり直す</button>
+</section>
+
+</div>
+</div>
+
+<script>
+var P = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+var cur = 0;
+(function(){
+  var nav=document.getElementById('jumpnav');
+  var labels=['始','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','終'];
+  labels.forEach(function(lb,i){
+    var b=document.createElement('button');
+    b.className='jump'; b.textContent=lb; b.id='jb'+i;
+    b.setAttribute('aria-label', i===0?'はじめに':(i===labels.length-1?'ゴール':'ステップ'+lb));
+    b.onclick=function(){ go(i); };
+    nav.appendChild(b);
+  });
+})();
+function go(i){
+  if(i<0||i>=P.length) return;
+  cur=i;
+  P.forEach(function(p,j){ p.classList.toggle('hidden', j!==i); });
+  document.getElementById('prog').textContent = (i+1)+' / '+P.length;
+  document.getElementById('fill').style.width = Math.round((i+1)/P.length*100)+'%';
+  document.getElementById('prevb').style.visibility = (i===0)?'hidden':'visible';
+  P.forEach(function(_,j){
+    var b=document.getElementById('jb'+j);
+    if(b) b.classList.toggle('here', j===i);
+  });
+}
+function nextBtn(fb,i){
+  if(fb.querySelector('button.next')) return;
+  var b=document.createElement('button');
+  b.textContent='次へ →'; b.className='next';
+  b.onclick=function(){ go(i+1); };
+  fb.appendChild(b);
+}
+function mc(btn,ok,step,msg){
+  var fb=document.getElementById('f'+step);
+  if(ok){
+    fb.innerHTML='<span class="ok">正解! '+(msg||'')+'</span>';
+    btn.classList.add('correct');
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">おしい! '+(msg||'もう一度考えてみよう。')+'</span>';
+  }
+}
+var hints={
+  3:'配った本数(5×10)に、あまった31本をたそう。',
+  4:'必要な本数(10×10)から、足りない34本をひこう。',
+  5:'81 − 66 を計算しよう。',
+  12:'総数より31本手前から34本先まで。31 + 34 だよ。',
+  14:'65本の差を、1人あたり5本で割ろう。',
+  15:'5 × 13 に、あまりの31をたそう。'
+};
+function ck(step,ans,msg){
+  var v=Number(document.getElementById('i'+step).value);
+  var fb=document.getElementById('f'+step);
+  if(v===ans){
+    fb.innerHTML='<span class="ok">正解! '+msg+'</span>';
+    nextBtn(fb,step);
+  }else{
+    fb.innerHTML='<span class="ng">'+(hints[step]||'もう一度!')+'</span>';
+  }
+}
+var rows=10;
+function addRow(){
+  if(rows>=13) return;
+  rows++;
+  var t=document.getElementById('t1');
+  var r=t.insertRow(-1);
+  var a=5*rows+31, b=10*rows-34;
+  r.innerHTML='<td>'+rows+'人</td><td>'+a+'</td><td>'+b+'</td><td>'+(a-b)+'</td>';
+  if(rows===13){
+    var fb=document.getElementById('f6');
+    fb.innerHTML='<span class="ok">くいちがいが 0 になった! 13人のとき、どちらの計算でも 96本。</span>';
+    nextBtn(fb,6);
+  }
+}
+(function(){
+  var t3=document.getElementById('t3');
+  for(var n=10;n<=13;n++){
+    (function(n){
+      var a=5*n+31, b=10*n-34;
+      var r=t3.insertRow(-1);
+      r.className='pick';
+      r.innerHTML='<td>'+n+'人</td><td>'+a+'</td><td>'+b+'</td><td>'+(a-b)+'</td>';
+      r.onclick=function(){
+        var fb=document.getElementById('f9');
+        if(n===13){
+          r.classList.add('won');
+          fb.innerHTML='<span class="ok">正解! 13人・えんぴつ96本。表だけでも解けた!</span>';
+          nextBtn(fb,9);
+        }else{
+          fb.innerHTML='<span class="ng">その行はくいちがいが残っているよ。0 の行をさがそう。</span>';
+        }
+      };
+    })(n);
+  }
+})();
+function ckAll(){
+  var a=Number(document.getElementById('j1').value);
+  var b=Number(document.getElementById('j2').value);
+  var c=Number(document.getElementById('j3').value);
+  var d=Number(document.getElementById('j4').value);
+  var fb=document.getElementById('f16');
+  if(a===36&&b===3&&c===12&&d===68){
+    fb.innerHTML='<span class="ok">全問正解! 差36 ÷ 3本 = 12人、4 × 12 + 20 = 68本。検算:7 × 12 − 16 = 68本。</span>';
+    nextBtn(fb,16);
+  }else{
+    var h=[];
+    if(a!==36) h.push('差は 20 + 16');
+    if(b!==3) h.push('1人あたりは 7 − 4');
+    if(c!==12) h.push('人数は 差 ÷ 1人あたり');
+    if(d!==68) h.push('本数は 4 × 人数 + 20');
+    fb.innerHTML='<span class="ng">ヒント:'+h.join(' / ')+'</span>';
+  }
+}
+go(0);
+</script>
+</body>
+</html>
