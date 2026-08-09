@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>約束記号のれんしゅう — ルールに当てはめて計算しよう</title>
+<meta name="description" content="約束記号のルールを読み取り、式に当てはめて計算する練習教材です。">
+<meta name="course-order" content="3">
+<style>
+:root{
+  --paper:#FDFBF6; --ink:#2B2B33; --sub:#6B6B76; --line:#E4E0D6;
+  --a-blue:#2E6FB7; --b-orange:#C95A1F; --ok:#2F8F5B; --ng:#C0392B;
+  --violet:#5B4FB5; --violet-bg:#EDEBFA; --hint-bg:#FFF3D2; --hint-ink:#7A5410;
+  --card:#FFFFFF;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","BIZ UDGothic","Yu Gothic",sans-serif;
+  font-size:17px; line-height:1.7;
+  padding:0 16px 64px; max-width:660px; margin-left:auto; margin-right:auto;
+}
+header{padding:28px 4px 8px;}
+h1{font-size:24px; font-weight:600; margin:0 0 4px;}
+.lead{color:var(--sub); font-size:15px; margin:0;}
+.stars{
+  display:flex; gap:6px; align-items:center; margin:14px 0 4px;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 14px;
+}
+.stars .label{font-size:14px; color:var(--sub); margin-right:auto;}
+.star{width:26px; height:26px; opacity:.25; transition:opacity .3s, transform .3s;}
+.star.on{opacity:1; transform:scale(1.15);}
+.levelband{
+  margin:28px 0 12px; font-size:15px; font-weight:600; color:var(--violet);
+  display:flex; align-items:center; gap:10px;
+}
+.levelband::after{content:""; flex:1; height:1px; background:var(--line);}
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:18px;
+  padding:20px; margin:0 0 18px;
+}
+.stephead{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+.stepnum{
+  flex:none; width:32px; height:32px; border-radius:50%;
+  background:var(--violet-bg); color:var(--violet);
+  display:flex; align-items:center; justify-content:center; font-weight:600; font-size:15px;
+}
+h2{font-size:18px; font-weight:600; margin:0;}
+.note{color:var(--sub); font-size:15px; margin:8px 0;}
+.rule{
+  background:var(--paper); border:1px dashed var(--line); border-radius:12px;
+  padding:12px 16px; text-align:center;
+  font-family:"Hiragino Maru Gothic ProN",monospace; font-size:19px; margin:12px 0;
+}
+.A{color:var(--a-blue); font-weight:600;} .B{color:var(--b-orange); font-weight:600;}
+.ok-ink{color:var(--ok); font-weight:600;}
+.calcline{font-size:18px; text-align:center; padding:5px 0;}
+.ghost{visibility:hidden;}
+.row{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px;}
+.q{font-size:18px;}
+input[type=number], input[type=text]{
+  width:96px; height:48px; font-size:18px; text-align:center;
+  border:1.5px solid var(--line); border-radius:12px; background:#fff; color:var(--ink);
+}
+input:focus{outline:none; border-color:var(--violet); box-shadow:0 0 0 3px var(--violet-bg);}
+button{
+  height:48px; padding:0 18px; font-size:16px; font-weight:600;
+  border:1.5px solid var(--line); border-radius:12px; background:#fff; color:var(--ink);
+  font-family:inherit; cursor:pointer;
+}
+button:active{transform:scale(.97); background:var(--paper);}
+button.primary{background:var(--violet); border-color:var(--violet); color:#fff;}
+.hint{display:none; background:var(--hint-bg); color:var(--hint-ink); border-radius:12px; padding:10px 14px; font-size:15px; margin-top:12px;}
+.hint.show{display:block;}
+.fb{min-height:26px; margin-top:10px; font-size:16px; font-weight:600;}
+.fb.good{color:var(--ok);} .fb.bad{color:var(--ng);} .fb.empty{color:var(--sub); font-weight:400;}
+.goal{
+  display:none; text-align:center; background:var(--violet-bg); border-radius:18px;
+  padding:26px 20px; margin-top:24px;
+}
+.goal.show{display:block;}
+.goal h2{font-size:20px; color:var(--violet); margin-bottom:6px;}
+#resetBtn{margin-top:12px;}
+@media (prefers-reduced-motion: reduce){ .star{transition:none;} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>約束記号のれんしゅう</h1>
+  <p class="lead">見たことのない記号でも、ルールに当てはめるだけ。少しずつステップアップしよう。</p>
+</header>
+
+<div class="stars" id="starbar">
+  <span class="label">せいかいすると星がたまるよ</span>
+</div>
+
+<div class="levelband">レベル1 やさしい</div>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">1</span><h2>記号の正体は「かくれた+」</h2></div>
+  <p class="note">「◎」は学校で習わない記号。でも問題文がルールを教えてくれるよ。</p>
+  <div class="rule">A ◎ B = <span class="A">A</span> + <span class="B">B</span></div>
+  <p class="note">つまり「◎」は<span class="ok-ink">たし算のべつの名前</span>なだけ。2 ◎ 3 なら 2 + 3 = 5。</p>
+  <div class="row">
+    <span class="q">5 ◎ 4 =</span>
+    <input type="number" inputmode="numeric" id="q1">
+    <button class="primary" data-check="1">こたえあわせ</button>
+  </div>
+  <div class="fb" id="f1"></div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">2</span><h2>+1のおまけがつくルール</h2></div>
+  <div class="rule">A ◎ B = <span class="A">A</span> + <span class="B">B</span> + 1</div>
+  <p class="note">ボタンを押すと 2 ◎ 3 の計算が1行ずつ進むよ。<span class="A">A=2</span>、<span class="B">B=3</span> を当てはめるだけ。</p>
+  <div class="calcline">2 ◎ 3</div>
+  <div class="calcline ghost" id="d1">= <span class="A">2</span> + <span class="B">3</span> + 1 ← 当てはめた!</div>
+  <div class="calcline ghost" id="d2">= <span class="ok-ink">6</span> できた!</div>
+  <div class="row" style="justify-content:center;">
+    <button id="demoBtn">▶ つぎへ</button>
+  </div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">3</span><h2>れんしゅう</h2></div>
+  <div class="rule">A ◎ B = A + B + 1</div>
+  <div class="row">
+    <span class="q">4 ◎ 2 =</span>
+    <input type="number" inputmode="numeric" id="q2">
+    <button class="primary" data-check="2">こたえあわせ</button>
+    <button data-hint="h2">ヒント</button>
+  </div>
+  <div class="hint" id="h2">A=4、B=2 だから「4 + 2 + 1」を計算してみよう。</div>
+  <div class="fb" id="f2"></div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">4</span><h2>かけ算が1つだけ入るルール</h2></div>
+  <p class="note">新しい記号「★」が出てきても、やることはおなじ。当てはめるだけ。</p>
+  <div class="rule">A ★ B = <span class="A">A</span> × 2 + <span class="B">B</span></div>
+  <div class="row">
+    <span class="q">3 ★ 4 =</span>
+    <input type="number" inputmode="numeric" id="q3">
+    <button class="primary" data-check="3">こたえあわせ</button>
+    <button data-hint="h3">ヒント</button>
+  </div>
+  <div class="hint" id="h3">A=3、B=4 だから「3×2 + 4」。かけ算をさきに計算しよう。</div>
+  <div class="fb" id="f3"></div>
+</section>
+
+<div class="levelband">レベル2 入試レベルにちょうせん</div>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">5</span><h2>しきが長くなっても、やることはおなじ</h2></div>
+  <div class="rule">A ★ B = <span class="A">A</span> × <span class="B">B</span> + <span class="A">A</span> + <span class="B">B</span></div>
+  <p class="note">ボタンを押すと 2 ★ 3 の計算が1行ずつ進むよ。Aが2かしょ、Bが2かしょあるのがポイント。</p>
+  <div class="calcline">2 ★ 3</div>
+  <div class="calcline ghost" id="e1">= <span class="A">2</span> × <span class="B">3</span> + <span class="A">2</span> + <span class="B">3</span> ← ぜんぶ当てはめた!</div>
+  <div class="calcline ghost" id="e2">= 6 + 2 + 3</div>
+  <div class="calcline ghost" id="e3">= <span class="ok-ink">11</span> できた!</div>
+  <div class="row" style="justify-content:center;">
+    <button id="demo2Btn">▶ つぎへ</button>
+  </div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">6</span><h2>れんしゅう</h2></div>
+  <div class="rule">A ★ B = A × B + A + B</div>
+  <div class="row">
+    <span class="q">4 ★ 2 =</span>
+    <input type="number" inputmode="numeric" id="q4">
+    <button class="primary" data-check="4">こたえあわせ</button>
+    <button data-hint="h4">ヒント</button>
+  </div>
+  <div class="hint" id="h4">A=4、B=2 だから「4×2 + 4 + 2」だよ。</div>
+  <div class="fb" id="f4"></div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">7</span><h2>ぎゃくに考える: まずはやさしい□から</h2></div>
+  <p class="note">こんどは、こたえから「□」をさがすよ。まずはたし算だけのルールでやってみよう。</p>
+  <div class="rule">A ◎ B = A + B + 1 のとき、 □ ◎ 3 = 10</div>
+  <div class="row">
+    <span class="q">□ =</span>
+    <input type="number" inputmode="numeric" id="q5">
+    <button class="primary" data-check="5">こたえあわせ</button>
+    <button data-hint="h5">ヒント</button>
+  </div>
+  <div class="hint" id="h5">当てはめると □ + 3 + 1 = 10。つまり □ + 4 = 10 だね。□に何をたすと10になるかな?</div>
+  <div class="fb" id="f5"></div>
+</section>
+
+<section class="card">
+  <div class="stephead"><span class="stepnum">8</span><h2>さいごのちょうせん: □を見つけよう</h2></div>
+  <p class="note">入試ではこの「□さがし」がよく出るよ。考え方はさっきとおなじ。</p>
+  <div class="rule">A ★ B = <span class="A">A</span> × <span class="B">B</span> + <span class="A">A</span> + <span class="B">B</span></div>
+  <div class="rule">□ ★ 2 = 17 のとき、□は?</div>
+  <div class="row">
+    <span class="q">□ =</span>
+    <input type="number" inputmode="numeric" id="q6">
+    <button class="primary" data-check="6">こたえあわせ</button>
+    <button data-hint="h6">ヒント</button>
+  </div>
+  <div class="hint" id="h6">□×2 + □ + 2 = 17 だね。「□×2 + □」は「□が3こ」だから、□×3 + 2 = 17。□×3 はいくつかな?</div>
+  <div class="fb" id="f6"></div>
+</section>
+
+<div class="goal" id="goal">
+  <h2>ぜんぶクリア!</h2>
+  <p class="note">星が6こそろったね。約束記号はもうこわくない。<br>「ルールを見つけて、当てはめる」— これが合言葉だよ。</p>
+  <button id="resetBtn">星をリセットしてもういちど</button>
+</div>
+
+<script>
+(function(){
+  var answers = {
+    1:{a:9,  good:"せいかい! 5+4=9。記号はこわくないね。", bad:"おしい! ◎は「+」のこと。5+4 を計算してみよう。"},
+    2:{a:7,  good:"せいかい! 4+2+1=7 だね。", bad:"おしい! +1のおまけをわすれてないかな?"},
+    3:{a:10, good:"せいかい! 3×2+4=10。", bad:"おしい! Aは★の左の数(3)だよ。3×2をさきに。"},
+    4:{a:14, good:"せいかい! 4×2+4+2=14 だね。", bad:"おしい! ヒントを見て、もういちどやってみよう。"},
+    5:{a:6,  good:"せいかい! □=6。6+3+1=10 になるね。", bad:"おしい! □+4=10 と考えてみよう。"},
+    6:{a:5,  good:"せいかい! □=5。5×2+5+2=17 になるね。", bad:"おしい! □×3+2=17 と考えてみよう。"}
+  };
+  var earned = {};
+  try{
+    var saved = localStorage.getItem("yakusoku_stars");
+    if(saved){ earned = JSON.parse(saved) || {}; }
+  }catch(e){ earned = {}; }
+
+  var starbar = document.getElementById("starbar");
+  var starEls = {};
+  for(var i=1;i<=6;i++){
+    var s = document.createElementNS("http://www.w3.org/2000/svg","svg");
+    s.setAttribute("viewBox","0 0 24 24");
+    s.setAttribute("class","star");
+    s.innerHTML = '<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill="#E8A93C"/>';
+    starbar.appendChild(s);
+    starEls[i] = s;
+  }
+  function save(){
+    try{ localStorage.setItem("yakusoku_stars", JSON.stringify(earned)); }catch(e){}
+  }
+  function refresh(){
+    var count = 0;
+    for(var k=1;k<=6;k++){
+      if(earned[k]){ starEls[k].classList.add("on"); count++; }
+      else{ starEls[k].classList.remove("on"); }
+    }
+    document.getElementById("goal").classList.toggle("show", count===6);
+  }
+  refresh();
+
+  document.querySelectorAll("[data-check]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var n = btn.getAttribute("data-check");
+      var input = document.getElementById("q"+n);
+      var fb = document.getElementById("f"+n);
+      var spec = answers[n];
+      fb.className = "fb";
+      if(input.value === ""){ fb.classList.add("empty"); fb.textContent = "数字を入れてみてね"; return; }
+      if(Number(input.value) === spec.a){
+        fb.classList.add("good"); fb.textContent = "○ " + spec.good;
+        earned[n] = true; save(); refresh();
+      }else{
+        fb.classList.add("bad"); fb.textContent = spec.bad;
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-hint]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.getElementById(btn.getAttribute("data-hint")).classList.toggle("show");
+    });
+  });
+
+  function makeStepper(btnId, lineIds){
+    var step = 0;
+    var btn = document.getElementById(btnId);
+    btn.addEventListener("click", function(){
+      step++;
+      if(step <= lineIds.length){
+        document.getElementById(lineIds[step-1]).classList.remove("ghost");
+        if(step === lineIds.length){ btn.textContent = "↻ もういちど"; }
+      }else{
+        step = 0;
+        lineIds.forEach(function(id){ document.getElementById(id).classList.add("ghost"); });
+        btn.textContent = "▶ つぎへ";
+      }
+    });
+  }
+  makeStepper("demoBtn", ["d1","d2"]);
+  makeStepper("demo2Btn", ["e1","e2","e3"]);
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    earned = {}; save(); refresh();
+    for(var k=1;k<=6;k++){
+      document.getElementById("q"+k).value = "";
+      var fb = document.getElementById("f"+k); fb.className="fb"; fb.textContent="";
+    }
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+})();
+</script>
+</body>
+</html>
