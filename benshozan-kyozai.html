@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="じゃんけんで勝てば3段上がり、負ければ1段下がる。20回で24段上がったのは何勝?「地下に潜る面積図」を18ステップで。">
+<meta name="description" content="じゃんけんで勝てば3段上がり、負ければ1段下がる。20回で24段上がったのは何勝?「地下に潜る面積図」を1本ずつ組み立てる27ステップ。">
 <meta name="course-order" content="4">
-<title>弁償算マスター — 表と「地下つき面積図」を18ステップで</title>
+<title>弁償算マスター — 表と「地下つき面積図」を27ステップで</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
@@ -74,6 +74,7 @@ table.age tr.won td{background:var(--ok-bg)}
 .r-win{background:var(--kid-bg);border-color:var(--kid);color:var(--kid-dark)}
 .r-lose{background:var(--mom-bg);border-color:var(--mom);color:var(--mom-dark)}
 .r-over{background:var(--mom);border-color:var(--mom-dark);color:#fff}
+.r-dim{background:rgba(216,90,48,.25);border-color:var(--mom);color:var(--mom-dark)}
 .r-dash{border-style:dashed;background:transparent;color:var(--ink-soft)}
 .r-band{justify-content:flex-start;padding-left:10px}
 .vlabel{width:52px;font-size:12.5px;font-weight:700;color:var(--ink-soft);text-align:right;padding-right:8px;flex:none;align-self:center}
@@ -108,11 +109,11 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
 <div class="wrap">
 <header>
   <h1>弁償算マスター</h1>
-  <p>「上がる」と「下がる」がまざる問題を、表 → 地下つき面積図の18ステップで</p>
+  <p>「上がる」と「下がる」がまざる問題を、表 → 地下つき面積図の27ステップで</p>
 </header>
 
 <div class="progressbar">
-  <span class="prog-label" id="prog">1 / 20</span>
+  <span class="prog-label" id="prog">1 / 29</span>
   <div class="track"><div class="fill" id="fill"></div></div>
   <button class="backbtn" id="prevb" onclick="go(cur-1)">← 戻る</button>
 </div>
@@ -124,7 +125,7 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
 <section class="panel" id="p0">
   <span class="step-tag">はじめに</span>
   <p class="problem">【問題】花子さんと太郎くんが階段でじゃんけんをしました。<b>勝ったら3段上がる・負けたら1段下がる</b>というルールで <b>20回</b> じゃんけんをしたところ、花子さんは<b>はじめの位置より24段上</b>にいました。花子さんは何回勝ったでしょう?</p>
-  <p class="q">つるかめ算とよく似ていますが、片方が「下がる=マイナス」なのがちがうところ。このタイプを <b>弁償算</b> といいます。18個の小さなステップでゆっくり進みます。</p>
+  <p class="q">つるかめ算とよく似ていますが、片方が「下がる=マイナス」なのがちがうところ。このタイプを <b>弁償算</b> といいます。前半7ステップで表、後半20ステップで面積図を1本ずつ組み立てます。</p>
   <button class="next" onclick="go(1)">はじめる →</button>
 </section>
 
@@ -182,9 +183,9 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
 
 <section class="panel hidden" id="p6">
   <span class="step-tag">ステップ 6</span>
-  <p class="q">ここが山場! なぜ1回置きかえると <b>4段</b> も減るんだろう?(3と1でできる数なのに、3−1=2 ではない理由)</p>
+  <p class="q">ここが表パートの山場! なぜ1回置きかえると <b>4段</b> も減るんだろう?(3と1でできる数なのに、3−1=2 ではない理由)</p>
   <button class="choice" onclick="mc(this,false,6,'3 − 1 = 2 は「1回勝って1回負けた人の位置」の計算。いまは勝ち1回が負け1回に変わる話。上がるはずだった3段はどうなった?')">3 − 1 = 2 だから(2段のはず)</button>
-  <button class="choice" onclick="mc(this,true,6,'もらえるはずだった3段が消え(−3)、さらに1段下がる(−1)。合わせて 3 + 1 = 4段減る。「上がる量 + 下がる量」がたし算になるのが弁償算の心臓部!')">上がるはずの3段がなくなり、さらに1段下がるから 3 + 1 = 4段</button>
+  <button class="choice" onclick="mc(this,true,6,'もらえるはずだった3段が消え(−3)、さらに1段下がる(−1)。合わせて 3 + 1 = 4段減る。「上がる量 + 下がる量」がたし算になるのが弁償算の心臓部! この 4 を後半の面積図でもういちど見つけます。')">上がるはずの3段がなくなり、さらに1段下がるから 3 + 1 = 4段</button>
   <button class="choice" onclick="mc(this,false,6,'じゃんけんの回数は20回のまま変わらないよ。変わるのは段数のほう。')">じゃんけんの回数が増えるから</button>
   <div class="fb" id="f6"></div>
 </section>
@@ -198,50 +199,115 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
 
 <section class="panel hidden" id="p8">
   <span class="step-tag">ステップ 8</span>
-  <p class="q">ここから面積図。まず図の読み方だけ練習しよう。「全部勝ちなら 3 × 20 = 60段」を長方形で表しました。この長方形の「たて」は何を表している?</p>
+  <p class="q">ここから面積図。いきなり問題を解かず、まず<b>図の読み方だけ</b>を3ステップで練習します。「全部勝ちなら 3 × 20 = 60段」を長方形にしました。この長方形の <b>たて</b> は何を表している?</p>
   <div class="fig">
     <span class="vlabel">3段</span>
     <div class="rect r-win" style="width:260px;height:72px">3段 × 20回 = 60段</div>
   </div>
   <div class="hlabel" style="margin-left:52px;width:260px">20回</div>
-  <button class="choice" onclick="mc(this,false,8,'よこの長さが20回=じゃんけんの回数。たては左に書いてある「3段」。')">じゃんけんの回数</button>
-  <button class="choice" onclick="mc(this,true,8,'たて = 1回あたりに動く段数。よこ = 回数。')">1回勝つと上がる段数</button>
+  <button class="choice" onclick="mc(this,false,8,'それはよこの長さのほう。たては左に書いてある「3段」だよ。')">じゃんけんをした回数</button>
+  <button class="choice" onclick="mc(this,true,8,'たて = 1回あたりに動く段数。面積図の「たて」はいつも“1つあたりの量”。')">1回勝つと上がる段数</button>
+  <button class="choice" onclick="mc(this,false,8,'60段は長方形ぜんたいの広さ(面積)。たてはその一辺だけだよ。')">上がった段数の合計</button>
   <div class="fb" id="f8"></div>
 </section>
 
 <section class="panel hidden" id="p9">
   <span class="step-tag">ステップ 9</span>
-  <p class="q">では、この長方形の「面積」(たて × よこ = 3 × 20)は何を表している?</p>
+  <p class="q">同じ長方形の <b>よこ</b> は何を表している?</p>
   <div class="fig">
     <span class="vlabel">3段</span>
-    <div class="rect r-win" style="width:260px;height:72px">面積 = ?</div>
+    <div class="rect r-win" style="width:260px;height:72px">3段 × 20回 = 60段</div>
   </div>
   <div class="hlabel" style="margin-left:52px;width:260px">20回</div>
-  <button class="choice" onclick="mc(this,false,9,'たて × よこ を計算すると 3 × 20 = 60。この60の単位は「段」。つまり…?')">じゃんけんの合計(20回)</button>
-  <button class="choice" onclick="mc(this,true,9,'1回あたりの段数 × 回数 = 上がった段数の合計。面積図では「面積 = 合計」。')">上がった段数の合計(60段)</button>
+  <button class="choice" onclick="mc(this,false,9,'3段はたてのほう。よこは下に書いてある「20回」だよ。')">1回あたりに上がる段数</button>
+  <button class="choice" onclick="mc(this,true,9,'よこ = 回数。面積図の「よこ」はいつも“いくつ分か”。')">じゃんけんをした回数</button>
   <div class="fb" id="f9"></div>
 </section>
 
 <section class="panel hidden" id="p10">
   <span class="step-tag">ステップ 10</span>
-  <p class="q">弁償算ならではの工夫。負けは「1段<b>下がる</b>」から、上がる分は地面より上、下がる分は…? 負けの長方形はどこにかく?</p>
+  <p class="q">では <b>面積</b>(たて × よこ = 3 × 20)は何を表している?</p>
   <div class="fig">
-    <span class="vlabel"></span>
-    <div class="plane" style="width:260px;height:96px">
-      <div class="ground" style="bottom:24px"></div>
-      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
-      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち(3段)</div>
-      <div class="rect r-dash" style="left:143px;bottom:8px;width:117px;height:36px">負け(1段)は<br>どこ?</div>
-    </div>
+    <span class="vlabel">3段</span>
+    <div class="rect r-win" style="width:260px;height:72px">面積 = ?</div>
   </div>
-  <button class="choice" onclick="mc(this,false,10,'上にかくと「上がった」ことになってしまう。負けると位置は下がるよ。')">地面より上、勝ちのとなりに</button>
-  <button class="choice" onclick="mc(this,true,10,'負けの長方形は地面の下(地下)にかく! こうすると「上の面積」が上がった分、「下の面積」が下がった分になる。')">地面より下(地下にもぐらせる)</button>
+  <div class="hlabel" style="margin-left:52px;width:260px">20回</div>
+  <button class="choice" onclick="mc(this,false,10,'たて × よこ を計算すると 3 × 20 = 60。この60の単位は「回」ではなく「段」だよ。')">じゃんけんの合計(20回)</button>
+  <button class="choice" onclick="mc(this,true,10,'1回あたりの段数 × 回数 = 上がった段数の合計。<b>たて=1つあたり・よこ=いくつ分・面積=合計</b>。この3つが面積図のぜんぶ!')">上がった段数の合計(60段)</button>
   <div class="fb" id="f10"></div>
 </section>
 
 <section class="panel hidden" id="p11">
   <span class="step-tag">ステップ 11</span>
-  <p class="q">負けを地下にかきました。何回ずつ勝ったかはまだわからないけど、「よこの長さの合計」だけはわかる。何回?</p>
+  <p class="q">読み方がわかったので、ここから<b>実際の図を1本ずつ組み立てます</b>。まず、はじめの位置に「地面の線」を引き、勝った回の分だけ長方形をかきました。この長方形が地面より<b>上</b>にのびているのはなぜ?</p>
+  <div class="fig">
+    <span class="vlabel">3段</span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち(?回)</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,true,11,'勝つと位置が上がるから、地面より上にかく。「上=上がる」と決めたことを、このあと負けにも使います。')">勝つと位置が上がるから</button>
+  <button class="choice" onclick="mc(this,false,11,'何回勝ったかはまだわかっていないよ。理由は「勝つとどうなるか」のほう。')">勝った回数のほうが多いから</button>
+  <div class="fb" id="f11"></div>
+</section>
+
+<section class="panel hidden" id="p12">
+  <span class="step-tag">ステップ 12</span>
+  <p class="q">つぎは負けの長方形。<b>ここが弁償算の急所です。</b>負けは「1段<b>下がる</b>」。負けの長方形はどこにかけばいい?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち(?回)</div>
+      <div class="rect r-dash" style="left:143px;bottom:8px;width:117px;height:36px">負けは<br>どこ?</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,false,12,'上にかくと「上がった」ことになってしまう。ステップ11で「上=上がる」と決めたね。負けると位置はどうなる?')">地面より上、勝ちのとなりに</button>
+  <button class="choice" onclick="mc(this,true,12,'負けの長方形は<b>地面の下(地下)</b>にかく! これが弁償算の面積図の正体。「上=上がった分」「下=下がった分」にきれいに分かれます。')">地面より下(地下にもぐらせる)</button>
+  <div class="fb" id="f12"></div>
+</section>
+
+<section class="panel hidden" id="p13">
+  <span class="step-tag">ステップ 13</span>
+  <p class="q">地下にかいた負けの長方形。この <b>たて</b> は何段?(たて = 1回あたりに動く段数、でした)</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち<br>たて3段</div>
+      <div class="rect r-lose" style="left:143px;bottom:0;width:117px;height:24px">たて = ?段</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,true,13,'1回負けると1段下がるから、たては1段。勝ち(3段)よりずっと背の低い長方形になる。')">1段</button>
+  <button class="choice" onclick="mc(this,false,13,'3段は勝ちのたて。負けは1回で何段動く?')">3段</button>
+  <button class="choice" onclick="mc(this,false,13,'4段はまだ出てきていない数。ルールをもう一度読もう。「負けたら何段下がる」?')">4段</button>
+  <div class="fb" id="f13"></div>
+</section>
+
+<section class="panel hidden" id="p14">
+  <span class="step-tag">ステップ 14</span>
+  <p class="q">では地下の長方形の <b>面積</b>(たて1段 × 負けた回数)は何を表している?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち</div>
+      <div class="rect r-lose" style="left:143px;bottom:0;width:117px;height:24px">面積 = ?</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,false,14,'それはよこの長さのほう。面積は たて × よこ で、単位は「段」になるよ。')">負けた回数</button>
+  <button class="choice" onclick="mc(this,true,14,'1段 × 負けた回数 = 負けて下がった段数の合計。これで<b>上の面積 = 上がった分</b>、<b>下の面積 = 下がった分</b>がそろいました。')">負けて下がった段数の合計</button>
+  <div class="fb" id="f14"></div>
+</section>
+
+<section class="panel hidden" id="p15">
+  <span class="step-tag">ステップ 15</span>
+  <p class="q">図が完成しました。何回ずつ勝ったかはまだわからないけれど、<b>よこの長さの合計</b>だけはもうわかる。何回?</p>
   <div class="fig">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
@@ -252,14 +318,14 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
     </div>
   </div>
   <div class="hlabel" style="margin-left:52px;width:260px">←—— 合わせて ?回 ——→</div>
-  <button class="choice" onclick="mc(this,true,11,'合わせて20回だから、よこ全体は20。境目の位置だけがナゾ。これが「和は並べる」!')">20回</button>
-  <button class="choice" onclick="mc(this,false,11,'24は段数。よこは「回数」だったね。')">24回</button>
-  <div class="fb" id="f11"></div>
+  <button class="choice" onclick="mc(this,true,15,'合わせて20回だから、よこ全体は20。<b>境目の位置だけがナゾ</b>という形になりました。これが「和は<b>並べる</b>」!')">20回</button>
+  <button class="choice" onclick="mc(this,false,15,'24は段数のほう。よこは「回数」だったね。')">24回</button>
+  <div class="fb" id="f15"></div>
 </section>
 
-<section class="panel hidden" id="p12">
-  <span class="step-tag">ステップ 12</span>
-  <p class="q">では「上の面積 − 下の面積」は何を表している?</p>
+<section class="panel hidden" id="p16">
+  <span class="step-tag">ステップ 16</span>
+  <p class="q">図からわかるもう1つの手がかり。<b>上の面積 − 下の面積</b> は何を表している?</p>
   <div class="fig">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
@@ -270,21 +336,21 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
     </div>
   </div>
   <p class="note" style="margin:0 0 12px">上の面積 = 勝って上がった段数の合計。下の面積 = 負けて下がった段数の合計。</p>
-  <button class="choice" onclick="mc(this,false,12,'60段は「全部勝ちだったら」の面積。いまは実際にいる場所の話。')">60段</button>
-  <button class="choice" onclick="mc(this,true,12,'上がった分から下がった分を引いた残りが、いまいる場所。だから 上の面積 − 下の面積 = 24段。「和は並べる、差は重ねる」の差のほう!')">いまいる場所(はじめの位置より24段上)</button>
-  <div class="fb" id="f12"></div>
+  <button class="choice" onclick="mc(this,false,16,'60段は「全部勝ちだったら」の面積。いまは実際にいる場所の話だよ。')">60段</button>
+  <button class="choice" onclick="mc(this,true,16,'上がった分から下がった分を引いた残りが、いまいる場所。だから <b>上の面積 − 下の面積 = 24段</b>。手がかりが2つそろいました:「よこの合計 = 20」と「面積の差 = 24」。')">いまいる場所(はじめの位置より24段上)</button>
+  <div class="fb" id="f16"></div>
 </section>
 
-<section class="panel hidden" id="p13">
-  <span class="step-tag">ステップ 13</span>
-  <p class="q">スライダーで負けの回数を動かして、「上の面積 − 下の面積」が <b>24段</b> になる場所を探そう!</p>
+<section class="panel hidden" id="p17">
+  <span class="step-tag">ステップ 17</span>
+  <p class="q">計算の前に、図の上で答えをさがしてみよう。スライダーで負けの回数を動かして、「上の面積 − 下の面積」が <b>24段</b> になる場所を見つけて!</p>
   <div class="fig" aria-hidden="true">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
       <div class="ground" style="bottom:24px"></div>
       <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
       <div class="rect r-win" id="fwin" style="left:0;bottom:24px;width:260px;height:72px">勝ち</div>
-      <div class="rect r-lose" id="flose" style="left:260px;bottom:0;width:0;height:24px;border-width:0">負け</div>
+      <div class="rect r-lose" id="flose" style="left:260px;bottom:0;width:0;height:24px;border-width:0"></div>
     </div>
   </div>
   <div style="margin-left:52px">
@@ -292,30 +358,86 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
     <input type="range" id="slider" min="0" max="20" value="0" step="1" oninput="slide(this.value)">
     <div class="total-box">上の面積 − 下の面積 = <span id="stotal">60</span> 段</div>
   </div>
-  <div class="fb" id="f13"></div>
+  <div class="fb" id="f17"></div>
 </section>
 
-<section class="panel hidden" id="p14">
-  <span class="step-tag">ステップ 14</span>
-  <p class="q">今度は計算で境目を見つけよう。「全部勝ち(3段 × 20回 = 60段)」の帯を上からかぶせます。実際の位置は24段。帯からはみ出している部分(色のこい所)の面積は何段?</p>
+<section class="panel hidden" id="p18">
+  <span class="step-tag">ステップ 18</span>
+  <p class="q">ここから<b>計算で境目を出す10ステップ</b>。まず「全部勝ちなら 3 × 20 = 60段」の帯(点線)を、実際の図の上からかぶせました。帯と実際の図がちがっているのは、<b>どの回のところ</b>?</p>
+  <p class="note" style="margin:0 0 6px">‥‥‥ 点線の帯 = 「全部勝ちなら 3段 × 20回 = 60段」</p>
   <div class="fig">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
       <div class="ground" style="bottom:24px"></div>
       <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
-      <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">全部勝ちなら 3 × 20 = 60段</div>
-      <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:96px">?段</div>
+      <div class="rect r-dash" style="left:0;bottom:24px;width:260px;height:72px"></div>
+      <div class="rect r-win" style="left:0;bottom:24px;width:143px;height:72px">勝ち</div>
+      <div class="rect r-lose" style="left:143px;bottom:0;width:117px;height:24px">負け</div>
     </div>
   </div>
-  <p class="note" style="margin-top:2px">こい部分 = 「もらえなかった段」+「下がってしまった段」。つまり 60段 と 24段 のちがいそのもの。</p>
-  <p class="fillrow">はみ出し = 60 − 24 = <input type="number" id="i14" placeholder="?"> 段</p>
-  <button class="action" onclick="ck(14,36,'はみ出しは 36段。ステップ3の「くいちがい36段」と同じ数が図に現れた!')">答え合わせ</button>
-  <div class="fb" id="f14"></div>
+  <button class="choice" onclick="mc(this,false,18,'勝った回のところは、帯とぴったり重なっているよ(どちらも3段のたて)。ずれているのは反対がわ。')">勝った回のところ</button>
+  <button class="choice" onclick="mc(this,true,18,'そのとおり。<b>負けた回のところだけ</b>、帯は3段のままなのに実際は地下1段までさがっている。このすき間がくいちがいの正体です。')">負けた回のところ</button>
+  <div class="fb" id="f18"></div>
 </section>
 
-<section class="panel hidden" id="p15">
-  <span class="step-tag">ステップ 15</span>
-  <p class="q">こい部分の「たて」は何段? 地下の1段から、帯の上の3段までをまとめて数えよう。(表パートの発見を思い出して!)</p>
+<section class="panel hidden" id="p19">
+  <span class="step-tag">ステップ 19</span>
+  <p class="q">負けた回のところのちがいを、こい色でぬりました。この <b>こい部分の面積</b> は何段?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">全部勝ちなら = 60段</div>
+      <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:96px">面積<br>= ?段</div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:2px">帯ぜんたいの面積が60段、実際にいる場所が24段。こい部分はそのちがいそのもの。</p>
+  <p class="fillrow">こい部分 = 60 − 24 = <input type="number" id="i19" placeholder="?"> 段</p>
+  <button class="action" onclick="ck(19,36,'こい部分は 36段。ステップ3で計算した「くいちがい36段」が、そのまま図形として目の前に出てきました!')">答え合わせ</button>
+  <div class="fb" id="f19"></div>
+</section>
+
+<section class="panel hidden" id="p20">
+  <span class="step-tag">ステップ 20</span>
+  <p class="q">こい部分の <b>たて</b> を、2回に分けてしらべます。まず <b>地面より上</b> の部分。ここは何段ぶん?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">たて3段の帯</div>
+      <div class="rect r-over" style="left:143px;bottom:24px;width:117px;height:72px">地上は<br>?段</div>
+      <div class="rect r-dim" style="left:143px;bottom:0;width:117px;height:24px"></div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,true,20,'地面より上は、帯のたてと同じ3段。「もらえるはずだったのにもらえなかった3段」の正体です。')">3段</button>
+  <button class="choice" onclick="mc(this,false,20,'1段は地面より下の部分。いま見ているのは地面より上だよ。')">1段</button>
+  <button class="choice" onclick="mc(this,false,20,'4段は地上と地下を合わせた高さ。いまは地上だけを見よう。')">4段</button>
+  <div class="fb" id="f20"></div>
+</section>
+
+<section class="panel hidden" id="p21">
+  <span class="step-tag">ステップ 21</span>
+  <p class="q">つぎに <b>地面より下</b> の部分。ここは何段ぶん?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
+      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">たて3段の帯</div>
+      <div class="rect r-dim" style="left:143px;bottom:24px;width:117px;height:72px">地上3段</div>
+      <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:24px">地下は?段</div>
+    </div>
+  </div>
+  <button class="choice" onclick="mc(this,false,21,'3段は地上の部分。地下にのびているのは負けの長方形で、そのたては…?')">3段</button>
+  <button class="choice" onclick="mc(this,true,21,'地面より下は、負けの長方形のたてと同じ1段。「さらに下がってしまった1段」の正体です。')">1段</button>
+  <div class="fb" id="f21"></div>
+</section>
+
+<section class="panel hidden" id="p22">
+  <span class="step-tag">ステップ 22</span>
+  <p class="q">図パートの山場! 地上3段と地下1段をつなげると、こい部分の <b>たて</b> は何段?</p>
   <div class="fig">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
@@ -325,53 +447,79 @@ input[type=range]{width:280px;accent-color:var(--kid);margin:6px 0}
       <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:96px">36段<br>たて = ?段</div>
     </div>
   </div>
-  <button class="choice" onclick="mc(this,false,15,'2段は「3 − 1」。でも図を見て。こい部分は地面の上に3段、地面の下に1段のびているよ。')">2段(3 − 1)</button>
-  <button class="choice" onclick="mc(this,true,15,'地上3段 + 地下1段 = 4段。表で発見した「1回置きかえると4段減る」の正体はこれ! 地下にもぐらせたから、たし算になる理由が図で見える。')">4段(3 + 1)</button>
-  <button class="choice" onclick="mc(this,false,15,'3段は地面から上の分だけ。地下にのびている1段も数えよう。')">3段</button>
-  <div class="fb" id="f15"></div>
+  <p class="note" style="margin-top:2px">地面の線がこい部分を横切っているので、上下に分けて数えられます。</p>
+  <button class="choice" onclick="mc(this,false,22,'2段は 3 − 1 の答え。でも図を見て。こい部分は地面の上に3段、さらに下に1段のびているよ。つながった長さはいくつ?')">2段(3 − 1)</button>
+  <button class="choice" onclick="mc(this,true,22,'地上3段 + 地下1段 = <b>4段</b>。ステップ6で表から発見した「1回置きかえると4段減る」の正体がこれ! <b>負けを地下にもぐらせたから、たし算になる理由が図の上に見える</b>のです。')">4段(3 + 1)</button>
+  <button class="choice" onclick="mc(this,false,22,'3段は地面から上の分だけ。地下にのびている1段も忘れずに数えよう。')">3段</button>
+  <div class="fb" id="f22"></div>
 </section>
 
-<section class="panel hidden" id="p16">
-  <span class="step-tag">ステップ 16</span>
-  <p class="q">こい部分は「面積36段・たて4段」の長方形。よこの長さ = 負けた回数は何回?</p>
+<section class="panel hidden" id="p23">
+  <span class="step-tag">ステップ 23</span>
+  <p class="q">たてがわかったので、あとは <b>よこ</b>。その前に確認:こい部分の「よこ」は何を表している?</p>
   <div class="fig">
     <span class="vlabel"></span>
     <div class="plane" style="width:260px;height:96px">
       <div class="ground" style="bottom:24px"></div>
-      <span class="gtag" style="bottom:24px">はじめの<br>位置</span>
+      <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">3 × 20 = 60段</div>
+      <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:96px">たて4段<br>面積36段</div>
+    </div>
+  </div>
+  <div class="hlabel" style="margin-left:195px;width:117px">よこ = ?</div>
+  <button class="choice" onclick="mc(this,false,23,'勝った回のところでは、帯と実際がぴったり重なっていてこい部分はできなかったね(ステップ18)。')">勝った回数</button>
+  <button class="choice" onclick="mc(this,true,23,'こい部分は<b>負けた回のところにだけ</b>できる。だから よこ = 負けた回数。求めたいものがよこの長さになりました!')">負けた回数</button>
+  <button class="choice" onclick="mc(this,false,23,'よこ全体(20回)は帯のほう。こい部分は帯の一部分だけだよ。')">じゃんけんをした全部の回数</button>
+  <div class="fb" id="f23"></div>
+</section>
+
+<section class="panel hidden" id="p24">
+  <span class="step-tag">ステップ 24</span>
+  <p class="q">こい部分は「面積36段・たて4段」の長方形。長方形のよこ = 面積 ÷ たて だから、負けた回数は?</p>
+  <div class="fig">
+    <span class="vlabel"></span>
+    <div class="plane" style="width:260px;height:96px">
+      <div class="ground" style="bottom:24px"></div>
       <div class="rect r-dash r-band" style="left:0;bottom:24px;width:260px;height:72px">3 × 20 = 60段</div>
       <div class="rect r-over" style="left:143px;bottom:0;width:117px;height:96px">面積36<br>÷ たて4</div>
     </div>
   </div>
   <div class="hlabel" style="margin-left:195px;width:117px">よこ = 負け ?回</div>
-  <p class="fillrow">負け = 36 ÷ 4 = <input type="number" id="i16" placeholder="?"> 回</p>
-  <button class="action" onclick="ck(16,9,'負けは9回。ステップ7で表から見つけた答えと同じ!')">答え合わせ</button>
-  <div class="fb" id="f16"></div>
+  <p class="fillrow">負け = 36 ÷ 4 = <input type="number" id="i24" placeholder="?"> 回</p>
+  <button class="action" onclick="ck(24,9,'負けは9回。ステップ7で表から見つけた答えと同じ! 遠回りに見えた面積図が、表とぴったり同じ数にたどりつきました。')">答え合わせ</button>
+  <div class="fb" id="f24"></div>
 </section>
 
-<section class="panel hidden" id="p17">
-  <span class="step-tag">ステップ 17</span>
-  <p class="q">最後に、聞かれていた「勝った回数」。全部で20回だから…</p>
-  <p class="fillrow">勝ち = 20 − 9 = <input type="number" id="i17" placeholder="?"> 回</p>
-  <button class="action" onclick="ck(17,11,'答えは11回! 検算:3 × 11 − 1 × 9 = 33 − 9 = 24段。ぴったり!')">答え合わせ</button>
-  <div class="fb" id="f17"></div>
+<section class="panel hidden" id="p25">
+  <span class="step-tag">ステップ 25</span>
+  <p class="q">聞かれていたのは「勝った回数」。じゃんけんは全部で20回だから…</p>
+  <p class="fillrow">勝ち = 20 − 9 = <input type="number" id="i25" placeholder="?"> 回</p>
+  <button class="action" onclick="ck(25,11,'答えは11回! あと1ステップ、本当に合っているか確かめましょう。')">答え合わせ</button>
+  <div class="fb" id="f25"></div>
 </section>
 
-<section class="panel hidden" id="p18">
-  <span class="step-tag">ステップ 18</span>
+<section class="panel hidden" id="p26">
+  <span class="step-tag">ステップ 26</span>
+  <p class="q">最後に検算。勝ち11回で 3 × 11 = 33段上がり、負け9回で 1 × 9 = 9段下がる。いまいるのは何段上?</p>
+  <p class="fillrow">33 − 9 = <input type="number" id="i26" placeholder="?"> 段</p>
+  <button class="action" onclick="ck(26,24,'ぴったり24段! 問題文と一致したので、勝ち11回・負け9回で正解です。')">答え合わせ</button>
+  <div class="fb" id="f26"></div>
+</section>
+
+<section class="panel hidden" id="p27">
+  <span class="step-tag">ステップ 27</span>
   <p class="q">練習問題(これが「弁償算」の名前の由来):「コップを1個運ぶと30円もらえるが、われると運賃がもらえないうえに70円<b>弁償</b>する。100個運んで2700円もらった」。全部無事に運んだと仮定して、4つの空らんをうめよう。</p>
-  <p class="fillrow">はみ出し = 30 × 100 − 2700 = <input type="number" id="j1" placeholder="?"> 円</p>
-  <p class="fillrow">はみ出しのたて = 30 + 70 = <input type="number" id="j2" placeholder="?"> 円</p>
-  <p class="fillrow">われた数 = <input type="number" id="j3" placeholder="?"> 個</p>
+  <p class="fillrow">こい部分の面積 = 30 × 100 − 2700 = <input type="number" id="j1" placeholder="?"> 円</p>
+  <p class="fillrow">こい部分のたて = 30 + 70 = <input type="number" id="j2" placeholder="?"> 円</p>
+  <p class="fillrow">われた数(= こい部分のよこ) = <input type="number" id="j3" placeholder="?"> 個</p>
   <p class="fillrow">無事に運んだ数 = <input type="number" id="j4" placeholder="?"> 個</p>
   <button class="action" onclick="ckAll()">答え合わせ</button>
-  <div class="fb" id="f18"></div>
+  <div class="fb" id="f27"></div>
 </section>
 
-<section class="panel hidden" id="p19">
+<section class="panel hidden" id="p28">
   <span class="step-tag">ゴール!</span>
-  <p class="q">全ステップ完了! 弁償算の型は「全部○○と仮定 → 合計とのくいちがい ÷ <b>(もらえる量 + 引かれる量)</b>」。面積図では、くいちがいが「こい部分の面積」、1回あたりの差が「地上 + 地下のたて」として見えるのでした。</p>
-  <p class="note">つるかめ算との唯一のちがいは、1回あたりの差が <b>引き算(4−2)ではなくたし算(3+1)</b> になること。下がる方を地下にかけば、その理由が図の上に見えます。次は「〇✕のテストで、まちがえると減点される問題」など、同じ型が使えるものをさがしてみよう。</p>
+  <p class="q">全27ステップ完了! 弁償算の型は「全部○○と仮定 → くいちがい ÷ <b>(もらえる量 + 引かれる量)</b>」。面積図では、くいちがいが<b>こい部分の面積</b>、1回あたりの差が<b>地上 + 地下をつないだたて</b>として見えるのでした。</p>
+  <p class="note">つるかめ算との唯一のちがいは、1回あたりの差が <b>引き算(4−2)ではなくたし算(3+1)</b> になること。下がる方を地下にかけば、その理由が図の上に見えます。次は「〇✕テストで、まちがえると減点される問題」など、同じ型が使えるものをさがしてみよう。</p>
   <button class="next" onclick="go(0)">最初からやり直す</button>
 </section>
 
@@ -383,7 +531,9 @@ var P = Array.prototype.slice.call(document.querySelectorAll('.panel'));
 var cur = 0;
 (function(){
   var nav=document.getElementById('jumpnav');
-  var labels=['始','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','終'];
+  var labels=['始'];
+  for(var n=1;n<=27;n++) labels.push(String(n));
+  labels.push('終');
   labels.forEach(function(lb,i){
     var b=document.createElement('button');
     b.className='jump'; b.textContent=lb; b.id='jb'+i;
@@ -424,9 +574,10 @@ function mc(btn,ok,step,msg){
 var hints={
   2:'1回あたり3段 × 20回 を計算しよう。',
   3:'60 − 24 を計算しよう。',
-  14:'全部勝ちの60段と、実際の24段のちがいだよ。',
-  16:'長方形のよこ = 面積 ÷ たて。36 ÷ 4 だよ。',
-  17:'じゃんけんは全部で20回。20から負けの9回をひこう。'
+  19:'帯ぜんたいの60段と、実際の24段のちがいだよ。',
+  24:'長方形のよこ = 面積 ÷ たて。36 ÷ 4 だよ。',
+  25:'じゃんけんは全部で20回。20から負けの9回をひこう。',
+  26:'上がった33段から、下がった9段をひこう。'
 };
 function ck(step,ans,msg){
   var v=Number(document.getElementById('i'+step).value);
@@ -463,7 +614,7 @@ function addRow(){
         var fb=document.getElementById('f7');
         if(n===9){
           r.classList.add('won');
-          fb.innerHTML='<span class="ok">正解! 負け9回・勝ち11回。表だけでも解けた!</span>';
+          fb.innerHTML='<span class="ok">正解! 負け9回・勝ち11回。表だけでも解けた! つぎは同じ答えを面積図で出します。</span>';
           nextBtn(fb,7);
         }else{
           fb.innerHTML='<span class="ng">その行の到達段数は24段じゃないよ。段数の列が24の行をさがそう。</span>';
@@ -487,10 +638,10 @@ function slide(v){
   fl.textContent=(v===0)?'':'負け';
   var total=3*(20-v)-1*v;
   document.getElementById('stotal').textContent=total;
-  var fb=document.getElementById('f13');
+  var fb=document.getElementById('f17');
   if(total===24){
-    fb.innerHTML='<span class="ok">24段になった! 負け9回のとき、上の面積と下の面積の差がちょうど24段。</span>';
-    nextBtn(fb,13);
+    fb.innerHTML='<span class="ok">24段になった! 負け9回のとき、上の面積と下の面積の差がちょうど24段。つぎは同じ場所を計算で出します。</span>';
+    nextBtn(fb,17);
   }else if(!fb.querySelector('button.next')){
     fb.innerHTML='<span class="ng">'+(total>24?'まだ上がりすぎ。負けを増やしてみよう。':'下がりすぎ! 負けを減らしてみよう。')+'</span>';
   }
@@ -500,15 +651,15 @@ function ckAll(){
   var b=Number(document.getElementById('j2').value);
   var c=Number(document.getElementById('j3').value);
   var d=Number(document.getElementById('j4').value);
-  var fb=document.getElementById('f18');
+  var fb=document.getElementById('f27');
   if(a===300&&b===100&&c===3&&d===97){
-    fb.innerHTML='<span class="ok">全問正解! はみ出し300円 ÷ 100円 = われたのは3個、無事なのは97個。検算:30×97 − 70×3 = 2910 − 210 = 2700円。</span>';
-    nextBtn(fb,18);
+    fb.innerHTML='<span class="ok">全問正解! こい部分300円 ÷ たて100円 = われたのは3個、無事なのは97個。検算:30×97 − 70×3 = 2910 − 210 = 2700円。</span>';
+    nextBtn(fb,27);
   }else{
     var h=[];
-    if(a!==300) h.push('はみ出しは 3000 − 2700');
+    if(a!==300) h.push('こい部分は 3000 − 2700');
     if(b!==100) h.push('たては「もらえるはずの30円」+「弁償する70円」');
-    if(c!==3) h.push('われた数は はみ出し ÷ たて');
+    if(c!==3) h.push('よこ = 面積 ÷ たて');
     if(d!==97) h.push('無事な数は 100 − われた数');
     fb.innerHTML='<span class="ng">ヒント:'+h.join(' / ')+'</span>';
   }
